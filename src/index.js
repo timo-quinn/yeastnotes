@@ -3,12 +3,33 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from "react-redux";
 import * as serviceWorker from './serviceWorker';
-import { applyMiddleware, combineReducers, createStore } from "redux";
-import reduxThunk from 'redux-thunk';
-import { firebaseReducer, ReactReduxFirebaseProvider } from "react-redux-firebase";
-import { firestoreReducer } from "redux-firestore";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import thunk from 'redux-thunk'
+import { firebaseReducer, getFirebase, ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { firestoreReducer, createFirestoreInstance } from "redux-firestore";
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
-import * as firebase from "firebase";
+
+const middleware = [
+  thunk.withExtraArgument({ getFirebase })
+];
+
+const createStoreWithMiddleware = compose(
+  applyMiddleware(...middleware),
+  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? () => window.__REDUX_DEVTOOLS_EXTENSION__ : f => f
+)(createStore);
+
+const store = createStoreWithMiddleware(combineReducers({
+  firebase: firebaseReducer,
+  firestore: firestoreReducer,
+}));
+
+const rrfConfig = {
+  userProfile: 'users',
+  useFirestoreForProfile: true,
+};
 
 firebase.initializeApp({
   apiKey: "AIzaSyD6KVv1hcgQACzFllxM_RQRI3F8OtxPKHU",
@@ -23,23 +44,14 @@ firebase.initializeApp({
 
 firebase.firestore();
 
-const store = createStore(
-  combineReducers({
-      firebase: firebaseReducer,
-      firestore: firestoreReducer,
-  }),
-  {},
-  applyMiddleware(reduxThunk)
-);
-
-const rrfConfig = {
-  userProfile: 'users',
-  useFirestoreForProfile: true,
-};
-
 ReactDOM.render(
   <Provider store={store}>
-    <ReactReduxFirebaseProvider firebase={firebase} config={rrfConfig} dispatch={store.dispatch}>
+    <ReactReduxFirebaseProvider
+      firebase={firebase}
+      config={rrfConfig}
+      dispatch={store.dispatch}
+      createFirestoreInstance={createFirestoreInstance}
+    >
       <App />
     </ReactReduxFirebaseProvider>
   </Provider>,
