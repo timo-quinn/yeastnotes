@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Button } from "semantic-ui-react";
+import { Menu, Button } from 'semantic-ui-react';
 
 const NavBar = (props) => (
   <Menu inverted attached="bottom" borderless>
     <Menu.Item>
-      <img alt="" src='/logo-simple.png' />
+      <img alt="" src="/logo-simple.png" />
     </Menu.Item>
     <Menu.Item header>Yeast Notes</Menu.Item>
     {!props.showLogin && (
@@ -13,10 +13,12 @@ const NavBar = (props) => (
         <Button positive icon="plus" content="Add Brew" onClick={props.handleAdd} />
       </Menu.Item>
     )}
-    <Menu.Menu position='right'>
+    <Menu.Menu position="right">
       {!props.showLogin && (
         <Menu.Item>
-          Logged in as {props.emailAddress}
+          Logged in as
+          {' '}
+          {props.emailAddress}
         </Menu.Item>
       )}
       {!props.showLogin && (

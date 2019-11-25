@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // import { useSelector } from 'react-redux'
 // import { useFirestore } from 'react-redux-firebase'
 import {
@@ -9,11 +10,25 @@ import {
 
 const opts = [
   // { text: 'Beer', value: 'beer' },
-  { text: 'Wine', value: 'wine' },
-  { text: 'Mead', value: 'mead' },
+  { key: 'wine', text: 'Wine', value: 'wine' },
+  { key: 'mead', text: 'Mead', value: 'mead' },
 ];
 
-export default function AddBrew({ open, onClose, onSubmit, title }) {
+export default function AddBrew(
+  {
+    open,
+    onClose,
+    onSubmit,
+    title,
+    setTitle,
+    overview,
+    setOverview,
+    brewType,
+    setBrewType,
+    startingGravity,
+    setStartingGravity,
+  },
+) {
   return (
     <Modal
       open={open}
@@ -34,22 +49,28 @@ export default function AddBrew({ open, onClose, onSubmit, title }) {
               >
                 <Form.Input
                   label="Title"
-                  placeholder="My First Mead"
+                  placeholder="My First Brew"
                   required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
                 <Form.Select
                   label="Type"
                   options={opts}
+                  onChange={(e, option) => setBrewType(option.value)}
                   required
                 />
                 <Form.Input
                   label="Overview"
                   placeholder="A Traditional Mead"
-                  required
+                  value={overview}
+                  onChange={(e) => setOverview(e.target.value)}
                 />
                 <Form.Input
                   label="Starting Gravity"
                   placeholder="1.010"
+                  value={startingGravity}
+                  onChange={(e) => setStartingGravity(e.target.value)}
                 />
                 <Form.Button
                   positive
@@ -63,5 +84,9 @@ export default function AddBrew({ open, onClose, onSubmit, title }) {
         </Grid>
       </Modal.Content>
     </Modal>
-  )
+  );
 }
+
+AddBrew.propTypes = {
+  open: PropTypes.bool,
+};

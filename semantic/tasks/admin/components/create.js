@@ -6,7 +6,7 @@
  This will create individual component repositories for each SUI component
 
   * copy component files from release
-  * create commonjs files as index.js for NPM release
+  * create commonjs files as index.jsx for NPM release
   * create release notes that filter only items related to component
   * custom package.json file from template
   * create bower.json from template
@@ -150,7 +150,7 @@ module.exports = function(callback) {
           .pipe(replace(regExp.match.settingsExport, regExp.replace.settingsExport))
           .pipe(replace(regExp.match.settingsReference, regExp.replace.settingsReference))
           .pipe(replace(regExp.match.jQuery, regExp.replace.jQuery))
-          .pipe(rename('index.js'))
+          .pipe(rename('index.jsx'))
           .pipe(gulp.dest(outputDirectory))
         ;
       }
@@ -211,7 +211,7 @@ module.exports = function(callback) {
               npm.dependencies = {
                 jquery: 'x.x.x'
               };
-              npm.main = 'index.js';
+              npm.main = 'index.jsx';
             }
             npm.name = packageName;
             if(version) {

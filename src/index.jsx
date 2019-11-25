@@ -1,24 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import { Provider } from "react-redux";
-import * as serviceWorker from './serviceWorker';
-import { applyMiddleware, combineReducers, compose, createStore } from "redux";
-import thunk from 'redux-thunk'
-import { firebaseReducer, getFirebase, ReactReduxFirebaseProvider } from "react-redux-firebase";
-import { firestoreReducer, createFirestoreInstance } from "redux-firestore";
+import { Provider } from 'react-redux';
+import {
+  applyMiddleware, combineReducers, compose, createStore,
+} from 'redux';
+import thunk from 'redux-thunk';
+import { firebaseReducer, getFirebase, ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { firestoreReducer, createFirestoreInstance } from 'redux-firestore';
 import firebase from 'firebase/app';
+import * as serviceWorker from './serviceWorker';
+import App from './App';
 import 'firebase/auth';
 import 'firebase/firestore';
 
 
 const middleware = [
-  thunk.withExtraArgument({ getFirebase })
+  thunk.withExtraArgument({ getFirebase }),
 ];
 
 const createStoreWithMiddleware = compose(
   applyMiddleware(...middleware),
-  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? () => window.__REDUX_DEVTOOLS_EXTENSION__ : f => f
+  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? () => window.__REDUX_DEVTOOLS_EXTENSION__ : (f) => f,
 )(createStore);
 
 const store = createStoreWithMiddleware(combineReducers({
@@ -32,14 +34,14 @@ const rrfConfig = {
 };
 
 firebase.initializeApp({
-  apiKey: "AIzaSyD6KVv1hcgQACzFllxM_RQRI3F8OtxPKHU",
-  authDomain: "yeast-notes.firebaseapp.com",
-  databaseURL: "https://yeast-notes.firebaseio.com",
-  projectId: "yeast-notes",
-  storageBucket: "yeast-notes.appspot.com",
-  messagingSenderId: "274927499497",
-  appId: "1:274927499497:web:9b0ea97f5b293e634ed878",
-  measurementId: "G-MYJYLRG9ZQ"
+  apiKey: 'AIzaSyD6KVv1hcgQACzFllxM_RQRI3F8OtxPKHU',
+  authDomain: 'yeast-notes.firebaseapp.com',
+  databaseURL: 'https://yeast-notes.firebaseio.com',
+  projectId: 'yeast-notes',
+  storageBucket: 'yeast-notes.appspot.com',
+  messagingSenderId: '274927499497',
+  appId: '1:274927499497:web:9b0ea97f5b293e634ed878',
+  measurementId: 'G-MYJYLRG9ZQ',
 });
 
 firebase.firestore();
@@ -55,7 +57,7 @@ ReactDOM.render(
       <App />
     </ReactReduxFirebaseProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change
