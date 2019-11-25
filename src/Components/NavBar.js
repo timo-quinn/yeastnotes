@@ -4,6 +4,9 @@ import { Menu, Button } from "semantic-ui-react";
 
 const NavBar = (props) => (
   <Menu inverted attached="bottom" borderless>
+    <Menu.Item>
+      <img src='/logo-simple.png' />
+    </Menu.Item>
     <Menu.Item header>Yeast Notes</Menu.Item>
     {!props.showLogin && (
       <Menu.Item>

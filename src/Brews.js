@@ -11,6 +11,7 @@ export default function Brews() {
   useFirestoreConnect(() => [ 'brews' ]);
 
   const brews = useSelector(state => state.firestore.ordered.brews);
+  const auth = useSelector(state => state.firebase.auth);
 
   const handleClickView = (e, brew) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ export default function Brews() {
     );
   }
 
-  if (isEmpty(brews)) {
+  if (isEmpty(brews) && !isEmpty(auth)) {
     return (
       <Message warning visible attached content="No brews added yet!" />
     );
