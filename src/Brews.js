@@ -15,8 +15,6 @@ export default function Brews() {
 
   const brews = useSelector(state => state.firestore.ordered.brews);
 
-  console.log(brews);
-
   const handleClickView = (e, brew) => {
 
   };
@@ -58,16 +56,16 @@ export default function Brews() {
   return (
     <Row>
       <Col>
-        {Object.keys(brews).map((brew) => (
-          <Card key={brew.key}>
+        {Object.keys(brews).map((key, id) => (
+          <Card key={id}>
             <Card.Body>
-              <Card.Title>{brew.title}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{brew.type}</Card.Subtitle>
+              <Card.Title>{brews[key].title}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{brews[key].type}</Card.Subtitle>
               <Card.Text>
-                {brew.overview}
+                {brews[key].overview}
               </Card.Text>
-              <Card.Link onClick={(e) => handleClickView(e, brew)}>View</Card.Link>
-              <Card.Link onClick={(e) => handleClickEdit(e, brew)}>Edit</Card.Link>
+              <Card.Link onClick={(e) => handleClickView(e, brews[key])}>View</Card.Link>
+              <Card.Link onClick={(e) => handleClickEdit(e, brews[key])}>Edit</Card.Link>
             </Card.Body>
           </Card>
         ))}
