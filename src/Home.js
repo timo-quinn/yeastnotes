@@ -23,7 +23,7 @@ function Home () {
         </Dimmer>
       )}
       {isEmpty(auth) && (
-        <Message visible content="Yeast Notes is read-only until you log in" />
+        <Message visible content="Yeast Notes is read-only until you log in." />
       )}
       <Brews />
     </Container>

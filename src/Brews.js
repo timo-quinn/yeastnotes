@@ -13,11 +13,13 @@ export default function Brews() {
   const brews = useSelector(state => state.firestore.ordered.brews);
 
   const handleClickView = (e, brew) => {
-
+    e.preventDefault();
+    console.log(brew);
   };
 
   const handleClickEdit = (e, brew) => {
-
+    e.preventDefault();
+    console.log(brew);
   };
 
   if (!isLoaded(brews)) {
@@ -30,27 +32,27 @@ export default function Brews() {
 
   if (isEmpty(brews)) {
     return (
-      <Message visible attached header="No Brews added yet" />
+      <Message warning visible attached content="No brews added yet!" />
     );
   }
 
   return (
     <Card.Group>
-      {Object.keys(brews).map((key, id) => (
+      {brews && brews.map((brew, id) => (
         <Card key={id}>
           <Card.Content>
-            <Card.Header>{brews[key].title}</Card.Header>
-            <Card.Meta className="mb-2 text-muted">{brews[key].type}</Card.Meta>
+            <Card.Header>{brew.title}</Card.Header>
+            <Card.Meta className="mb-2 text-muted">{brew.type}</Card.Meta>
             <Card.Description>
-              {brews[key].overview}
+              {brew.overview}
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
             <div className='ui two buttons'>
-              <Button primary onClick={(e) => handleClickView(e, brews[key])}>
+              <Button primary onClick={(e) => handleClickView(e, brew)}>
                 View
               </Button>
-              <Button secondary onClick={(e) => handleClickEdit(e, brews[key])}>
+              <Button secondary onClick={(e) => handleClickEdit(e, brew)}>
                 Edit
               </Button>
             </div>
