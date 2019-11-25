@@ -1,30 +1,30 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import {isEmpty, isLoaded, useFirebase, useFirestore, useFirestoreConnect} from "react-redux-firebase";
-import { Message, Segment, Icon, Container } from 'semantic-ui-react';
+import { isEmpty, isLoaded, useFirebase, useFirestore } from "react-redux-firebase";
+import { Message, Icon, Container } from 'semantic-ui-react';
 import NavBar from "./Components/NavBar";
 import Brews from "./Brews";
-import AddBrew from "./Components/AddBrew";
+import AddBrew from './Components/AddBrew';
 
 function Home () {
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const firebase = useFirebase();
   const firestore = useFirestore();
-  useFirestoreConnect(() => [ 'brews' ]);
   const auth = useSelector(state => state.firebase.auth);
 
   const onShowAddForm = (e) => {
     e.preventDefault();
-    setShowAdd(true);
+    setShowAddModal(true);
   };
 
   const onHideAddForm = (e) => {
     e.preventDefault();
-    setShowAdd(false);
+    setShowAddModal(false);
   };
 
   const onSubmitAdd = (e) => {
     console.log('onSubmitAdd');
+    firestore.add('brews', {});
   };
 
   return (
@@ -45,7 +45,7 @@ function Home () {
       </Message>
       <Message hidden={!isLoaded(auth) || !isEmpty(auth)} content="Yeast Notes is read-only until you log in." />
       {isLoaded(auth) && (<Brews />)}
-      <AddBrew open={showAdd} onClose={onHideAddForm} onSubmit={onSubmitAdd} />
+      <AddBrew open={showAddModal} onClose={onHideAddForm} onSubmit={onSubmitAdd} />
     </Container>
   )
 }

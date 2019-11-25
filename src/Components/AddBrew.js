@@ -1,17 +1,15 @@
 import React from 'react';
-import { useSelector } from 'react-redux'
-import { useFirestore } from 'react-redux-firebase'
-import { Modal, Button, Form } from 'semantic-ui-react';
+// import { useSelector } from 'react-redux'
+// import { useFirestore } from 'react-redux-firebase'
+import { Modal, Form } from 'semantic-ui-react';
 
-export default function AddBrew({ open, onClose, onSubmit }) {
-  const firestore = useFirestore();
+const opts = [
+  { text: 'Beer', value: 'beer' },
+  { text: 'Wine', value: 'wine' },
+  { text: 'Mead', value: 'mead' },
+];
 
-  const handleClickSave = (e, brew) => {
-    e.preventDefault();
-    console.log(brew);
-    firestore.add('brews', {});
-  };
-
+export default function AddBrew({ open, onClose, onSubmit, title }) {
   return (
     <Modal
       open={open}
@@ -27,7 +25,25 @@ export default function AddBrew({ open, onClose, onSubmit }) {
         <Form
           onSubmit={onSubmit}
         >
-          <Form.Button positive icon="plus" type="submit" content="Add Brew" />
+          <Form.Input
+            label="Title"
+            required
+          />
+          <Form.Select
+            label="Type"
+            options={opts}
+            required
+          />
+          <Form.Input
+            label="Overview"
+            required
+          />
+          <Form.Button
+            positive
+            icon="plus"
+            type="submit"
+            content="Add Brew"
+          />
         </Form>
       </Modal.Content>
     </Modal>
