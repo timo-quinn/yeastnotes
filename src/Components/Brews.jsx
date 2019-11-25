@@ -9,21 +9,11 @@ import {
   Message, Card, Button, Icon,
 } from 'semantic-ui-react';
 
-export default function Brews() {
+export default function Brews({ onHandleEdit }) {
   useFirestoreConnect(() => ['brews']);
 
   const brews = useSelector((state) => state.firestore.ordered.brews);
   const auth = useSelector((state) => state.firebase.auth);
-
-  const handleClickView = (e, brew) => {
-    e.preventDefault();
-    console.log(brew);
-  };
-
-  const handleClickEdit = (e, brew) => {
-    e.preventDefault();
-    console.log(brew);
-  };
 
   if (!isLoaded(brews)) {
     return (
@@ -44,7 +34,7 @@ export default function Brews() {
   }
 
   return (
-    <Card.Group>
+    <Card.Group itemsPerRow={4} stackable>
       {brews && brews.map((brew) => (
         <Card key={brew.id}>
           <Card.Content>
@@ -53,18 +43,11 @@ export default function Brews() {
             <Card.Description content={brew.overview} />
           </Card.Content>
           <Card.Content extra>
-            <div className="ui two buttons">
-              <Button
-                primary
-                onClick={(e) => handleClickView(e, brew)}
-                content="View"
-              />
-              <Button
-                secondary
-                onClick={(e) => handleClickEdit(e, brew)}
-                content="Edit"
-              />
-            </div>
+            <Button
+              primary
+              onClick={(e) => onHandleEdit(e, brew)}
+              content="Edit"
+            />
           </Card.Content>
         </Card>
       ))}

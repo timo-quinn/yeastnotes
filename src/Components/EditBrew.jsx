@@ -14,13 +14,13 @@ const opts = [
   { key: 'mead', text: 'Mead', value: 'mead' },
 ];
 
-export default function AddBrew(
+export default function EditBrew(
   {
     open,
     onClose,
     onSubmit,
-    addState,
-    onSetAddState,
+    editState,
+    onSetEditState,
   },
 ) {
   return (
@@ -33,7 +33,7 @@ export default function AddBrew(
       onActionClick={onSubmit}
       size="small"
     >
-      <Modal.Header content="Add Brew" />
+      <Modal.Header content="Edit Brew" />
       <Modal.Content>
         <Grid centered columns={2}>
           <Grid.Row>
@@ -45,26 +45,26 @@ export default function AddBrew(
                   label="Title"
                   placeholder="My First Brew"
                   required
-                  value={addState.title}
-                  onChange={(e) => onSetAddState('title', e.target.value)}
+                  value={editState.title}
+                  onChange={(e) => onSetEditState('title', e.target.value)}
                 />
                 <Form.Select
                   label="Type"
                   options={opts}
-                  onChange={(e, option) => onSetAddState('brewType', option.value)}
+                  onChange={(e, option) => onSetEditState('brewType', option.value)}
                   required
                 />
                 <Form.Input
                   label="Overview"
                   placeholder="A Traditional Mead"
-                  value={addState.overview}
-                  onChange={(e) => onSetAddState('overview', e.target.value)}
+                  value={editState.overview}
+                  onChange={(e) => onSetEditState('overview', e.target.value)}
                 />
                 <Form.Input
                   label="Starting Gravity"
                   placeholder="1.010"
-                  value={addState.startingGravity}
-                  onChange={(e) => onSetAddState('startingGravity', e.target.value)}
+                  value={editState.startingGravity}
+                  onChange={(e) => onSetEditState('startingGravity', e.target.value)}
                 />
                 <Form.Button
                   positive
@@ -81,6 +81,6 @@ export default function AddBrew(
   );
 }
 
-AddBrew.propTypes = {
+EditBrew.propTypes = {
   open: PropTypes.bool,
 };
