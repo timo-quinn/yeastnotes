@@ -25,7 +25,9 @@ const defaultEditState = {
 
 function Home() {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddError, setShowAddError] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditError, setShowEditError] = useState(false);
   const [addState, setAddState] = useState(defaultAddState);
   const [editState, setEditState] = useState(defaultEditState);
 
@@ -33,18 +35,19 @@ function Home() {
   const firestore = useFirestore();
   const auth = useSelector((state) => state.firebase.auth);
 
-  const onSetAddState = (key, val) => { setAddState({ ...addState, [key]: val })};
+  const onSetAddState = (key, val) => { setAddState({ ...addState, [key]: val }); };
 
   const onShowAddForm = () => {
     setAddState(defaultAddState);
-    setShowAddModal(true)
+    setShowAddModal(true);
   };
   const onHideAddForm = () => {
     setAddState(defaultAddState);
-    setShowAddModal(false)
+    setShowAddModal(false);
+    setShowAddError(false);
   };
 
-  const onSetEditState = (key, val) => { setEditState({ ...editState, [key]: val })};
+  const onSetEditState = (key, val) => { setEditState({ ...editState, [key]: val }); };
 
   const onShowEditForm = (e, brew) => {
     console.log(brew);
@@ -55,25 +58,36 @@ function Home() {
   const onHideEditForm = () => {
     setEditState(defaultEditState);
     setShowEditModal(false);
+    setShowEditError(false);
   };
 
   const onSubmitAdd = () => {
-    if (addState.brewType === '') {
+    setShowAddError(false);
+    if (!addState.brewType) {
       console.log('missing type');
+      setShowAddError(true);
     } else {
       firestore.add(
         'brews',
         {
           ...addState,
-        creatorId: auth.uid,
-        createdAt: Date.now(),
+          creatorId: auth.uid,
+          createdAt: Date.now(),
+        },
+      ).then(() => {
+        setShowAddModal(false);
+      }).catch((error) => {
+        console.error(error);
+        setShowAddError(true);
       });
     }
   };
 
   const onSubmitEdit = () => {
-    if (addState.brewType === '') {
+    setShowEditError(false);
+    if (!addState.brewType) {
       console.log('missing type');
+      setShowEditError(true);
     } else {
       firestore.update(
         'brews',
@@ -81,7 +95,13 @@ function Home() {
           ...addState,
           creatorId: auth.uid,
           createdAt: Date.now(),
-        });
+        },
+      ).then(() => {
+        setShowEditModal(false);
+      }).catch((error) => {
+        console.error(error);
+        setShowEditError(true);
+      });
     }
   };
 
@@ -112,6 +132,7 @@ function Home() {
         onSubmit={onSubmitAdd}
         addState={addState}
         onSetAddState={onSetAddState}
+        showAddError={showAddError}
       />
       <EditBrew
         open={showEditModal}
@@ -119,6 +140,7 @@ function Home() {
         onSubmit={onSubmitEdit}
         editState={editState}
         onSetEditState={onSetEditState}
+        showEditError={showEditError}
       />
     </Container>
   );

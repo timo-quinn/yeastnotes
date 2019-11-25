@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { useSelector } from 'react-redux'
-// import { useFirestore } from 'react-redux-firebase'
 import {
   Modal,
   Form,
   Grid,
+  Message,
 } from 'semantic-ui-react';
 
 const opts = [
@@ -21,6 +20,7 @@ export default function AddBrew(
     onSubmit,
     addState,
     onSetAddState,
+    showAddError,
   },
 ) {
   return (
@@ -73,6 +73,12 @@ export default function AddBrew(
                   content="Add Brew"
                 />
               </Form>
+              <Message
+                error
+                visible={showAddError}
+                header="Something Went Wrong"
+                content="Please check the form contents and try again."
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -83,4 +89,9 @@ export default function AddBrew(
 
 AddBrew.propTypes = {
   open: PropTypes.bool,
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
+  onSetAddState: PropTypes.func,
+  showAddError: PropTypes.bool,
+  addState: PropTypes.object,
 };

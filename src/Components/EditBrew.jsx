@@ -74,6 +74,17 @@ export default function EditBrew(
                 />
               </Form>
             </Grid.Column>
+            <Grid.Column>
+              <Header as="h3" content="Log" />
+              <Form
+                onSubmit={onSubmit}
+              >
+                {editState.logEntries.map((logEntry) => {
+                  <Form.TextArea
+                  />
+                })}
+              </Form>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </Modal.Content>
@@ -83,4 +94,8 @@ export default function EditBrew(
 
 EditBrew.propTypes = {
   open: PropTypes.bool,
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
+  editState: PropTypes.object,
+  onSetEditState: PropTypes.func,
 };
