@@ -5,7 +5,7 @@ import {
   isEmpty,
   useFirestoreConnect,
 } from 'react-redux-firebase'
-import { Dimmer, Segment, Loader, Message, Card, Button } from 'semantic-ui-react';
+import { Message, Card, Button, Icon } from 'semantic-ui-react';
 
 export default function Brews() {
   useFirestoreConnect(() => [ 'brews' ]);
@@ -24,9 +24,13 @@ export default function Brews() {
 
   if (!isLoaded(brews)) {
     return (
-      <Dimmer active>
-        <Loader />
-      </Dimmer>
+      <Message icon>
+        <Icon name='circle notched' loading />
+        <Message.Content>
+          <Message.Header>Loading Brews</Message.Header>
+          Please wait while we fetch your data.
+        </Message.Content>
+      </Message>
     );
   }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { isEmpty, isLoaded, useFirebase } from "react-redux-firebase";
-import {Dimmer, Segment, Loader, Message, Container} from 'semantic-ui-react';
+import { Message, Segment, Icon, Container } from 'semantic-ui-react';
 import NavBar from "./Components/NavBar";
 import Brews from "./Brews";
 
@@ -13,19 +13,24 @@ function Home () {
     <Container>
       <NavBar
         handleLogin={() => firebase.login({ provider: 'google', type: 'popup' })}
+        handleAdd={() => { console.log('add') }}
         showLogin={isEmpty(auth)}
         handleLogoff={() => firebase.logout()}
-        emailAddress={!isEmpty(auth) ? auth.email : ''}
+        emailAddress={!isEmpty(auth) ? auth.email : 'Unknown Email Address'}
       />
       {!isLoaded(auth) && (
-        <Dimmer active>
-          <Loader />
-        </Dimmer>
+        <Message icon>
+          <Icon name='circle notched' loading />
+          <Message.Content>
+            <Message.Header>Loading App</Message.Header>
+            Please wait while the application loads.
+          </Message.Content>
+        </Message>
       )}
-      {isEmpty(auth) && (
+      {isLoaded(auth) && isEmpty(auth) && (
         <Message visible content="Yeast Notes is read-only until you log in." />
       )}
-      <Brews />
+      {isLoaded(auth) && (<Brews />)}
     </Container>
   )
 }
