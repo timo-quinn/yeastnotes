@@ -5,10 +5,7 @@ import {
   isEmpty,
   useFirestoreConnect,
 } from 'react-redux-firebase'
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Spinner from "react-bootstrap/Spinner";
-import Row from "react-bootstrap/Row";
+import { Dimmer, Segment, Loader, Message, Card, Button } from 'semantic-ui-react';
 
 export default function Brews() {
   useFirestoreConnect(() => [ 'brews' ]);
@@ -25,51 +22,41 @@ export default function Brews() {
 
   if (!isLoaded(brews)) {
     return (
-      <Row>
-        <Col>
-          <Card>
-            <Card.Body>
-              <Spinner animation="border" role="status">
-                <span className="sr-only">Loading...</span>
-              </Spinner>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      <Dimmer active>
+        <Loader />
+      </Dimmer>
     );
   }
 
   if (isEmpty(brews)) {
     return (
-      <Row>
-        <Col>
-          <Card>
-            <Card.Body>
-              <h3>No Brews added yet</h3>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      <Message visible attached header="No Brews added yet" />
     );
   }
 
   return (
-    <Row>
-      <Col>
-        {Object.keys(brews).map((key, id) => (
-          <Card key={id}>
-            <Card.Body>
-              <Card.Title>{brews[key].title}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{brews[key].type}</Card.Subtitle>
-              <Card.Text>
-                {brews[key].overview}
-              </Card.Text>
-              <Card.Link onClick={(e) => handleClickView(e, brews[key])}>View</Card.Link>
-              <Card.Link onClick={(e) => handleClickEdit(e, brews[key])}>Edit</Card.Link>
-            </Card.Body>
-          </Card>
-        ))}
-      </Col>
-    </Row>
+    <Card.Group>
+      {Object.keys(brews).map((key, id) => (
+        <Card key={id}>
+          <Card.Content>
+            <Card.Header>{brews[key].title}</Card.Header>
+            <Card.Meta className="mb-2 text-muted">{brews[key].type}</Card.Meta>
+            <Card.Description>
+              {brews[key].overview}
+            </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <div className='ui two buttons'>
+              <Button primary onClick={(e) => handleClickView(e, brews[key])}>
+                View
+              </Button>
+              <Button secondary onClick={(e) => handleClickEdit(e, brews[key])}>
+                Edit
+              </Button>
+            </div>
+          </Card.Content>
+        </Card>
+      ))}
+    </Card.Group>
   )
 }
