@@ -27,8 +27,6 @@ export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
     where: ['isPublic', '==', true]
   };
   useFirestoreConnect(() => (queryConfig));
-  if (isAuthenticated) {
-  }
 
   if (!isLoaded(brews)) {
     return (
