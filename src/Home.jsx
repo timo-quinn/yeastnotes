@@ -6,7 +6,8 @@ import {
 import {
   Message,
   Icon,
-  Segment, Divider,
+  Segment,
+  Divider,
 } from 'semantic-ui-react';
 import NavBar from './Components/NavBar';
 import Brews from './Components/Brews';
@@ -133,11 +134,12 @@ function Home() {
             Please wait while the application loads.
           </Message.Content>
         </Message>
-        <Message
-          hidden={!isLoaded(auth) || !isEmpty(auth)}
-          content="Yeast Notes is read-only until you log in."
-        />
-        {isLoaded(auth) && (<Brews onHandleEdit={onShowEditForm} onHandleAdd={onShowAddForm} />)}
+        {isLoaded(auth) && (
+          <Brews
+            onHandleEdit={onShowEditForm}
+            onHandleAdd={onShowAddForm}
+            isAuthenticated={!isEmpty(auth)}
+          />)}
         <AddBrew
           open={showAddModal}
           onClose={onHideAddForm}

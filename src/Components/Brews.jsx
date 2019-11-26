@@ -13,7 +13,7 @@ import {
   Container,
 } from 'semantic-ui-react';
 
-export default function Brews({ onHandleEdit, onHandleAdd }) {
+export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
   useFirestoreConnect(() => ['brews']);
 
   const brews = useSelector((state) => state.firestore.ordered.brews);
@@ -39,12 +39,22 @@ export default function Brews({ onHandleEdit, onHandleAdd }) {
 
   return (
     <Container>
-      <Table unstackable compact>
+      <Message
+        hidden={isAuthenticated}
+        content="Yeast Notes is read-only until you log in."
+        attached="top"
+      />
+      <Message
+        hidden={!isAuthenticated}
+        content={`Logged in as ${auth.email}`}
+        attached="top"
+      />
+      <Table unstackable compact attached="bottom">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell>Title</Table.HeaderCell>
-            <Table.HeaderCell>Date</Table.HeaderCell>
+            <Table.HeaderCell>Start Date</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Overview</Table.HeaderCell>
           </Table.Row>
@@ -58,6 +68,7 @@ export default function Brews({ onHandleEdit, onHandleAdd }) {
                   onClick={(e) => onHandleEdit(e, brew)}
                   icon="edit"
                   size="small"
+                  disabled={!isAuthenticated}
                 />
               </Table.Cell>
               <Table.Cell>{brew.data.title}</Table.Cell>
@@ -76,6 +87,7 @@ export default function Brews({ onHandleEdit, onHandleAdd }) {
         icon="add"
         content="Add Brew"
         size="small"
+        disabled={!isAuthenticated}
       />
     </Table.HeaderCell>
   </Table.Row>

@@ -31,13 +31,6 @@ const NavBar = (props) => (
             <Menu.Menu position="right">
               {!props.showLogin && (
                 <Menu.Item>
-                  Logged in as
-                  {' '}
-                  {props.emailAddress}
-                </Menu.Item>
-              )}
-              {!props.showLogin && (
-                <Menu.Item>
                   <Button onClick={props.handleLogoff} icon="log out" content="Log Out" />
                 </Menu.Item>
               )}
