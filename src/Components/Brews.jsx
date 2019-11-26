@@ -12,6 +12,7 @@ import {
   Table,
   Container,
 } from 'semantic-ui-react';
+import {opts} from "../consts";
 
 export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
   useFirestoreConnect(() => ['brews']);
@@ -73,7 +74,7 @@ export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
               </Table.Cell>
               <Table.Cell>{brew.data.title}</Table.Cell>
               <Table.Cell>{brew.data.startDate}</Table.Cell>
-              <Table.Cell>{brew.data.brewType}</Table.Cell>
+              <Table.Cell>{brew.data.brewType && opts.find((o) => o.key === brew.data.brewType).text}</Table.Cell>
               <Table.Cell>{brew.data.overview}</Table.Cell>
             </Table.Row>
           ))}

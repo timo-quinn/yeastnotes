@@ -8,12 +8,7 @@ import {
   Header,
 } from 'semantic-ui-react';
 import {DateInput} from "semantic-ui-calendar-react";
-
-const opts = [
-  // { text: 'Beer', value: 'beer' },
-  { key: 'wine', text: 'Wine', value: 'wine' },
-  { key: 'mead', text: 'Mead', value: 'mead' },
-];
+import {opts} from "../consts";
 
 export default function AddBrew(
   {
