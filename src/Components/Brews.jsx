@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import {
   isLoaded,
@@ -12,19 +13,25 @@ import {
   Table,
   Container,
 } from 'semantic-ui-react';
-import { opts } from '../consts';
+import { brewOptions } from '../consts';
 
-export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
+export default function Brews(
+  {
+    onHandleEdit,
+    onHandleAdd,
+    isAuthenticated,
+  },
+) {
   const brews = useSelector((state) => state.firestore.ordered.brews);
   const auth = useSelector((state) => state.firebase.auth);
-  let queryConfig = isAuthenticated ? {
+  const queryConfig = isAuthenticated ? {
     collection: 'brews',
     orderBy: ['createdAt', 'desc'],
-    where: ['creatorId', '==', auth.uid]
+    where: ['creatorId', '==', auth.uid],
   } : {
     collection: 'brews',
     orderBy: ['createdAt', 'desc'],
-    where: ['isPublic', '==', true]
+    where: ['isPublic', '==', true],
   };
   useFirestoreConnect(() => (queryConfig));
 
@@ -80,10 +87,18 @@ export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
                   disabled={!isAuthenticated}
                 />
               </Table.Cell>
-              <Table.Cell>{brew.data.title}</Table.Cell>
-              <Table.Cell>{brew.data.startDate}</Table.Cell>
-              <Table.Cell>{brew.data.brewType && opts.find((o) => o.key === brew.data.brewType).text}</Table.Cell>
-              <Table.Cell>{brew.data.overview}</Table.Cell>
+              <Table.Cell>
+                {brew.data.title}
+              </Table.Cell>
+              <Table.Cell>
+                {brew.data.startDate}
+              </Table.Cell>
+              <Table.Cell>
+                {brew.data.brewType && brewOptions.find((o) => o.key === brew.data.brewType).text}
+              </Table.Cell>
+              <Table.Cell>
+                {brew.data.overview}
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
@@ -105,3 +120,9 @@ export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
     </Container>
   );
 }
+
+Brews.propTypes = {
+  onHandleEdit: PropTypes.func,
+  onHandleAdd: PropTypes.func,
+  isAuthenticated: PropTypes.bool,
+};

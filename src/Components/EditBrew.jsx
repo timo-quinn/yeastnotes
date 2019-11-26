@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal,
-  Button,
   Form,
   Grid,
   Header,
+  Table,
 } from 'semantic-ui-react';
-import { opts } from '../consts';
+import { brewOptions } from '../consts';
 
 export default function EditBrew(
   {
@@ -47,7 +47,7 @@ export default function EditBrew(
                 />
                 <Form.Select
                   label="Type"
-                  options={opts}
+                  options={brewOptions}
                   defaultValue={editState.brewType}
                   onChange={(e, option) => onSetEditState('brewType', option.value)}
                   required
@@ -74,20 +74,54 @@ export default function EditBrew(
             </Grid.Column>
             <Grid.Column>
               <Header as="h4" content="Log" />
+              <Table compact basic="very">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>
+                      Date Created
+                    </Table.HeaderCell>
+                    <Table.HeaderCell>
+                      Log Type
+                    </Table.HeaderCell>
+                    <Table.HeaderCell>
+                      Content
+                    </Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {editState.logEntries && editState.logEntries.map((logEntry) => (
+                    <Table.Row>
+                      <Table.Cell>
+                        {logEntry.dateCreated}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {logEntry.logType}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {logEntry.logContent}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
               <Form
                 onSubmit={onSubmit}
               >
-                {editState.logEntries && editState.logEntries.map((logEntry) => (
-                  <Form.TextArea />
-                ))}
+                <Form.Select
+                  label="Type"
+                  options={brewOptions}
+                  defaultValue={editState.brewType}
+                  onChange={(e, option) => onSetEditState('brewType', option.value)}
+                  required
+                />
+                <Form.Button
+                  positive
+                  basic
+                  icon="plus"
+                  onClick={onAddLogEntry}
+                  content="Add Log Entry"
+                />
               </Form>
-              <Button
-                positive
-                basic
-                icon="plus"
-                onClick={onAddLogEntry}
-                content="Add Log Entry"
-              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -102,4 +136,5 @@ EditBrew.propTypes = {
   onSubmit: PropTypes.func,
   editState: PropTypes.object,
   onSetEditState: PropTypes.func,
+  onAddLogEntry: PropTypes.func,
 };

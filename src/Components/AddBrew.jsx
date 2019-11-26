@@ -7,8 +7,8 @@ import {
   Message,
   Header,
 } from 'semantic-ui-react';
-import {DateInput} from "semantic-ui-calendar-react";
-import {opts} from "../consts";
+import { DateInput } from 'semantic-ui-calendar-react';
+import { brewOptions } from '../consts';
 
 export default function AddBrew(
   {
@@ -48,7 +48,7 @@ export default function AddBrew(
                 />
                 <Form.Select
                   label="Type"
-                  options={opts}
+                  options={brewOptions}
                   onChange={(e, option) => onSetAddState('brewType', option.value)}
                   required
                 />
