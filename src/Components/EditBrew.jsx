@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { useSelector } from 'react-redux'
-// import { useFirestore } from 'react-redux-firebase'
 import {
   Modal,
+  Button,
   Form,
   Grid,
+  Header,
 } from 'semantic-ui-react';
 
 const opts = [
@@ -21,6 +21,7 @@ export default function EditBrew(
     onSubmit,
     editState,
     onSetEditState,
+    onAddLogEntry,
   },
 ) {
   return (
@@ -33,11 +34,12 @@ export default function EditBrew(
       onActionClick={onSubmit}
       size="small"
     >
-      <Modal.Header content="Edit Brew" />
+      <Modal.Header content={`Edit ${editState.title}`} />
       <Modal.Content>
         <Grid centered columns={2}>
           <Grid.Row>
             <Grid.Column>
+              <Header as="h4" content="Brew Details" />
               <Form
                 onSubmit={onSubmit}
               >
@@ -51,6 +53,7 @@ export default function EditBrew(
                 <Form.Select
                   label="Type"
                   options={opts}
+                  defaultValue={editState.brewType}
                   onChange={(e, option) => onSetEditState('brewType', option.value)}
                   required
                 />
@@ -68,22 +71,27 @@ export default function EditBrew(
                 />
                 <Form.Button
                   positive
-                  icon="plus"
+                  icon="save"
                   type="submit"
-                  content="Add Brew"
+                  content="Save"
                 />
               </Form>
             </Grid.Column>
             <Grid.Column>
-              <Header as="h3" content="Log" />
+              <Header as="h4" content="Log" />
               <Form
                 onSubmit={onSubmit}
               >
-                {editState.logEntries.map((logEntry) => {
-                  <Form.TextArea
-                  />
-                })}
+                {editState.logEntries && editState.logEntries.map((logEntry) => <Form.TextArea
+                  />)}
               </Form>
+              <Button
+                positive
+                basic
+                icon="plus"
+                onClick={onAddLogEntry}
+                content="Add Log Entry"
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -6,10 +6,14 @@ import {
   useFirestoreConnect,
 } from 'react-redux-firebase';
 import {
-  Message, Card, Button, Icon,
+  Message,
+  Button,
+  Icon,
+  Table,
+  Container,
 } from 'semantic-ui-react';
 
-export default function Brews({ onHandleEdit }) {
+export default function Brews({ onHandleEdit, onHandleAdd }) {
   useFirestoreConnect(() => ['brews']);
 
   const brews = useSelector((state) => state.firestore.ordered.brews);
@@ -34,23 +38,49 @@ export default function Brews({ onHandleEdit }) {
   }
 
   return (
-    <Card.Group itemsPerRow={4} stackable>
-      {brews && brews.map((brew) => (
-        <Card key={brew.id}>
-          <Card.Content>
-            <Card.Header content={brew.title} />
-            <Card.Meta content={brew.type} />
-            <Card.Description content={brew.overview} />
-          </Card.Content>
-          <Card.Content extra>
-            <Button
-              primary
-              onClick={(e) => onHandleEdit(e, brew)}
-              content="Edit"
-            />
-          </Card.Content>
-        </Card>
-      ))}
-    </Card.Group>
+    <Container>
+      <Table unstackable compact>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell>Title</Table.HeaderCell>
+            <Table.HeaderCell>Date</Table.HeaderCell>
+            <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Overview</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {brews && brews.map((brew) => (
+            <Table.Row key={brew.id}>
+              <Table.Cell collapsing>
+                <Button
+                  primary
+                  onClick={(e) => onHandleEdit(e, brew)}
+                  icon="edit"
+                  size="small"
+                />
+              </Table.Cell>
+              <Table.Cell>{brew.data.title}</Table.Cell>
+              <Table.Cell>{brew.data.startDate}</Table.Cell>
+              <Table.Cell>{brew.data.brewType}</Table.Cell>
+              <Table.Cell>{brew.data.overview}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+    <Table.Footer fullWidth>
+  <Table.Row>
+    <Table.HeaderCell colSpan={5}>
+      <Button
+        positive
+        onClick={(e) => onHandleAdd(e)}
+        icon="add"
+        content="Add Brew"
+        size="small"
+      />
+    </Table.HeaderCell>
+  </Table.Row>
+    </Table.Footer>
+      </Table>
+    </Container>
   );
 }

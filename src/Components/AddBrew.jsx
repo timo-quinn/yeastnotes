@@ -5,7 +5,9 @@ import {
   Form,
   Grid,
   Message,
+  Header,
 } from 'semantic-ui-react';
+import {DateInput} from "semantic-ui-calendar-react";
 
 const opts = [
   // { text: 'Beer', value: 'beer' },
@@ -35,9 +37,10 @@ export default function AddBrew(
     >
       <Modal.Header content="Add Brew" />
       <Modal.Content>
-        <Grid centered columns={2}>
+        <Grid columns={2} stackable>
           <Grid.Row>
             <Grid.Column>
+              <Header as="h4" content="Brew Details" />
               <Form
                 onSubmit={onSubmit}
               >
@@ -53,6 +56,13 @@ export default function AddBrew(
                   options={opts}
                   onChange={(e, option) => onSetAddState('brewType', option.value)}
                   required
+                />
+                <Form.Field
+                  control={DateInput}
+                  label="Brew Start Date"
+                  value={addState.startDate}
+                  iconPosition="left"
+                  onChange={(e, date) => onSetAddState('startDate', date.value)}
                 />
                 <Form.Input
                   label="Overview"
@@ -75,7 +85,7 @@ export default function AddBrew(
               </Form>
               <Message
                 error
-                visible={showAddError}
+                hidden={!showAddError}
                 header="Something Went Wrong"
                 content="Please check the form contents and try again."
               />

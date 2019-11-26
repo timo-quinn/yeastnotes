@@ -3,7 +3,11 @@ import { useSelector } from 'react-redux';
 import {
   isEmpty, isLoaded, useFirebase, useFirestore,
 } from 'react-redux-firebase';
-import { Message, Icon, Container } from 'semantic-ui-react';
+import {
+  Message,
+  Icon,
+  Segment, Divider,
+} from 'semantic-ui-react';
 import NavBar from './Components/NavBar';
 import Brews from './Components/Brews';
 import AddBrew from './Components/AddBrew';
@@ -14,6 +18,7 @@ const defaultAddState = {
   overview: '',
   startingGravity: '',
   brewType: '',
+  startDate: '',
 };
 
 const defaultEditState = {
@@ -21,6 +26,7 @@ const defaultEditState = {
   overview: '',
   startingGravity: '',
   brewType: '',
+  startDate: '',
 };
 
 function Home() {
@@ -51,7 +57,7 @@ function Home() {
 
   const onShowEditForm = (e, brew) => {
     console.log(brew);
-    setEditState(brew);
+    setEditState(brew.data);
     setShowEditModal(true);
   };
 
@@ -70,7 +76,7 @@ function Home() {
       firestore.add(
         'brews',
         {
-          ...addState,
+          data: addState,
           creatorId: auth.uid,
           createdAt: Date.now(),
         },
@@ -92,9 +98,8 @@ function Home() {
       firestore.update(
         'brews',
         {
-          ...addState,
-          creatorId: auth.uid,
-          createdAt: Date.now(),
+          data: editState,
+          updatedAt: Date.now(),
         },
       ).then(() => {
         setShowEditModal(false);
@@ -105,44 +110,53 @@ function Home() {
     }
   };
 
+  const onAddLogEntry = () => {
+
+  };
+
   return (
-    <Container>
+    <div>
       <NavBar
         handleLogin={() => firebase.login({ provider: 'google', type: 'popup' })}
-        handleAdd={onShowAddForm}
         showLogin={isEmpty(auth)}
         handleLogoff={() => firebase.logout()}
         emailAddress={!isEmpty(auth) ? auth.email : 'Unknown Email Address'}
       />
-      <Message icon hidden={isLoaded(auth)}>
-        <Icon name="circle notched" loading />
-        <Message.Content>
-          <Message.Header>Loading App</Message.Header>
-          Please wait while the application loads.
-        </Message.Content>
-      </Message>
-      <Message
-        hidden={!isLoaded(auth) || !isEmpty(auth)}
-        content="Yeast Notes is read-only until you log in."
-      />
-      {isLoaded(auth) && (<Brews onHandleEdit={onShowEditForm} />)}
-      <AddBrew
-        open={showAddModal}
-        onClose={onHideAddForm}
-        onSubmit={onSubmitAdd}
-        addState={addState}
-        onSetAddState={onSetAddState}
-        showAddError={showAddError}
-      />
-      <EditBrew
-        open={showEditModal}
-        onClose={onHideEditForm}
-        onSubmit={onSubmitEdit}
-        editState={editState}
-        onSetEditState={onSetEditState}
-        showEditError={showEditError}
-      />
-    </Container>
+      <Divider hidden />
+      <Divider hidden />
+      <Divider hidden />
+      <Segment basic>
+        <Message icon hidden={isLoaded(auth)}>
+          <Icon name="circle notched" loading />
+          <Message.Content>
+            <Message.Header>Loading App</Message.Header>
+            Please wait while the application loads.
+          </Message.Content>
+        </Message>
+        <Message
+          hidden={!isLoaded(auth) || !isEmpty(auth)}
+          content="Yeast Notes is read-only until you log in."
+        />
+        {isLoaded(auth) && (<Brews onHandleEdit={onShowEditForm} onHandleAdd={onShowAddForm} />)}
+        <AddBrew
+          open={showAddModal}
+          onClose={onHideAddForm}
+          onSubmit={onSubmitAdd}
+          addState={addState}
+          onSetAddState={onSetAddState}
+          showAddError={showAddError}
+        />
+        <EditBrew
+          open={showEditModal}
+          onClose={onHideEditForm}
+          onSubmit={onSubmitEdit}
+          editState={editState}
+          onSetEditState={onSetEditState}
+          showEditError={showEditError}
+          onAddLogEntry={onAddLogEntry}
+        />
+      </Segment>
+    </div>
   );
 }
 
