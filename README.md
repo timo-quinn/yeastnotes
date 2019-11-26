@@ -12,13 +12,14 @@ At this stage every brew will need to be created by an authenticated user. Every
 
 I'm planning to add the following features:
 
- * Deleting brews
- * Copying brews
- * Exporting data into Excel & JSON
- * Gravity Calculations for ABV
- * Tasting Notes (Clarity, Aroma, Taste)
- * Temperature Log (& adjusting Gravity accordingly?)
- * Nutrient Additions
+ * Deleting brews.
+ * Copying brews.
+ * Exporting data into Excel & JSON.
+ * Fix the rendering for Mobile.
+ * Gravity Calculations for ABV.
+ * Tasting Notes (Clarity, Aroma, Taste).
+ * Temperature Log (& adjusting Gravity accordingly?).
+ * Nutrient Additions.
  * Beer support - I don't brew beer, but I know it's got a whole heap of extra data that may be useful to capture, like water hardness and acidity.
  * Comments on public brews.
  * Sharing brews (i.e. permalinks).
