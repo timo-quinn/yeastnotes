@@ -12,13 +12,13 @@ import {
   Table,
   Container,
 } from 'semantic-ui-react';
-import {opts} from "../consts";
+import { opts } from '../consts';
 
 export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
-  useFirestoreConnect(() => ['brews']);
-
   const brews = useSelector((state) => state.firestore.ordered.brews);
   const auth = useSelector((state) => state.firebase.auth);
+  useFirestoreConnect(() => ({ collection: 'brews', orderBy: ['createdAt', 'desc'], where: ['creatorId', '==', auth.uid] }));
+
 
   if (!isLoaded(brews)) {
     return (
@@ -79,20 +79,20 @@ export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
             </Table.Row>
           ))}
         </Table.Body>
-    <Table.Footer fullWidth>
-  <Table.Row>
-    <Table.HeaderCell colSpan={5}>
-      <Button
-        positive
-        onClick={(e) => onHandleAdd(e)}
-        icon="add"
-        content="Add Brew"
-        size="small"
-        disabled={!isAuthenticated}
-      />
-    </Table.HeaderCell>
-  </Table.Row>
-    </Table.Footer>
+        <Table.Footer fullWidth>
+          <Table.Row>
+            <Table.HeaderCell colSpan={5}>
+              <Button
+                positive
+                onClick={(e) => onHandleAdd(e)}
+                icon="add"
+                content="Add Brew"
+                size="small"
+                disabled={!isAuthenticated}
+              />
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
       </Table>
     </Container>
   );

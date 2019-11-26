@@ -7,7 +7,7 @@ import {
   Grid,
   Header,
 } from 'semantic-ui-react';
-import {opts} from "../consts";
+import { opts } from '../consts';
 
 export default function EditBrew(
   {
@@ -77,8 +77,9 @@ export default function EditBrew(
               <Form
                 onSubmit={onSubmit}
               >
-                {editState.logEntries && editState.logEntries.map((logEntry) => <Form.TextArea
-                  />)}
+                {editState.logEntries && editState.logEntries.map((logEntry) => (
+                  <Form.TextArea />
+                ))}
               </Form>
               <Button
                 positive
