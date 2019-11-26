@@ -1,26 +1,45 @@
 {
-  // Example:
-  //
-  // "indexes": [
-  //   {
-  //     "collectionGroup": "widgets",
-  //     "queryScope": "COLLECTION",
-  //     "fields": [
-  //       { "fieldPath": "foo", "arrayConfig": "CONTAINS" },
-  //       { "fieldPath": "bar", "mode": "DESCENDING" }
-  //     ]
-  //   },
-  //
-  //  "fieldOverrides": [
-  //    {
-  //      "collectionGroup": "widgets",
-  //      "fieldPath": "baz",
-  //      "indexes": [
-  //        { "order": "ASCENDING", "queryScope": "COLLECTION" }
-  //      ]
-  //    },
-  //   ]
-  // ]
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "brews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "creatorId", "mode": "ASCENDING" },
+        { "fieldPath": "createdAt", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "brews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "creatorId", "mode": "ASCENDING" },
+        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "brews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "creatorId", "mode": "ASCENDING" },
+        { "fieldPath": "startDate", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "brews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "creatorId", "mode": "ASCENDING" },
+        { "fieldPath": "startDate", "mode": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "brews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "createdAt", "mode": "DESCENDING" },
+        { "fieldPath": "isPublic", "mode": "ASCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

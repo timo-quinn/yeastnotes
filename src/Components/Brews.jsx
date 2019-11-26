@@ -17,8 +17,18 @@ import { opts } from '../consts';
 export default function Brews({ onHandleEdit, onHandleAdd, isAuthenticated }) {
   const brews = useSelector((state) => state.firestore.ordered.brews);
   const auth = useSelector((state) => state.firebase.auth);
-  useFirestoreConnect(() => ({ collection: 'brews', orderBy: ['createdAt', 'desc'], where: ['creatorId', '==', auth.uid] }));
-
+  let queryConfig = isAuthenticated ? {
+    collection: 'brews',
+    orderBy: ['createdAt', 'desc'],
+    where: ['creatorId', '==', auth.uid]
+  } : {
+    collection: 'brews',
+    orderBy: ['createdAt', 'desc'],
+    where: ['isPublic', '==', true]
+  };
+  useFirestoreConnect(() => (queryConfig));
+  if (isAuthenticated) {
+  }
 
   if (!isLoaded(brews)) {
     return (
