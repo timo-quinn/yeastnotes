@@ -27,8 +27,6 @@ export default function AddBrew(
       closeOnDimmerClick
       closeIcon
       closeOnEscape
-      onActionClick={onSubmit}
-      size="small"
     >
       <Modal.Header content="Add Brew" />
       <Modal.Content>
@@ -46,21 +44,23 @@ export default function AddBrew(
                   value={addState.title}
                   onChange={(e) => onSetAddState('title', e.target.value)}
                 />
-                <Form.Select
-                  label="Type"
-                  options={brewOptions}
-                  onChange={(e, option) => onSetAddState('brewType', option.value)}
-                  required
-                />
-                <Form.Field
-                  control={DateInput}
-                  label="Brew Start Date"
-                  value={addState.startDate}
-                  iconPosition="left"
-                  onChange={(e, date) => onSetAddState('startDate', date.value)}
-                />
+                <Form.Group widths="equal">
+                  <Form.Select
+                    label="Type"
+                    options={brewOptions}
+                    onChange={(e, option) => onSetAddState('brewType', option.value)}
+                    required
+                  />
+                  <Form.Field
+                    control={DateInput}
+                    label="Brew Start Date"
+                    value={addState.startDate}
+                    iconPosition="left"
+                    onChange={(e, date) => onSetAddState('startDate', date.value)}
+                  />
+                </Form.Group>
                 <Form.Input
-                  label="Overview"
+                  label="Short Description"
                   placeholder="A Traditional Mead"
                   value={addState.overview}
                   onChange={(e) => onSetAddState('overview', e.target.value)}

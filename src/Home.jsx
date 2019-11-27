@@ -6,6 +6,7 @@ import {
 import {
   Message,
   Icon,
+  Container,
   Segment,
   Divider,
 } from 'semantic-ui-react';
@@ -20,6 +21,7 @@ const defaultAddState = {
   startingGravity: '',
   brewType: '',
   startDate: '',
+  logEntries: [],
 };
 
 const defaultEditState = {
@@ -28,6 +30,13 @@ const defaultEditState = {
   startingGravity: '',
   brewType: '',
   startDate: '',
+  logEntries: [],
+};
+
+const defaultLogState = {
+  logEntryDate: '',
+  logType: '',
+  content: '',
 };
 
 function Home() {
@@ -35,6 +44,7 @@ function Home() {
   const [showAddError, setShowAddError] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showEditError, setShowEditError] = useState(false);
+  const [addLogEntryState, setAddLogEntryState] = useState(defaultLogState);
   const [addState, setAddState] = useState(defaultAddState);
   const [editState, setEditState] = useState(defaultEditState);
 
@@ -42,7 +52,11 @@ function Home() {
   const firestore = useFirestore();
   const auth = useSelector((state) => state.firebase.auth);
 
-  const onSetAddState = (key, val) => { setAddState({ ...addState, [key]: val }); };
+  const updateState = (key, val, setFunc, state) => setFunc({ ...state, [key]: val });
+
+  const onSetAddState = (key, val) => updateState(key, val, setAddState, addState);
+  const onSetEditState = (key, val) => updateState(key, val, setEditState, editState);
+  const onSetAddLogState = (key, val) => updateState(key, val, setAddLogEntryState, addLogEntryState);
 
   const onShowAddForm = () => {
     setAddState(defaultAddState);
@@ -54,7 +68,6 @@ function Home() {
     setShowAddError(false);
   };
 
-  const onSetEditState = (key, val) => { setEditState({ ...editState, [key]: val }); };
 
   const onShowEditForm = (e, brew) => {
     console.log(brew);
@@ -67,6 +80,7 @@ function Home() {
     setShowEditModal(false);
     setShowEditError(false);
   };
+
 
   const onSubmitAdd = () => {
     setShowAddError(false);
@@ -112,11 +126,34 @@ function Home() {
   };
 
   const onAddLogEntry = () => {
-
+    const newLogEntries = [];
+    const currentLogEntries = editState.logEntries;
+    currentLogEntries.forEach((log) => {
+      newLogEntries.push(log);
+    });
+    newLogEntries.push({ log: addLogEntryState });
+    // change the state, but let the save button do the firestore write
+    onSetEditState('logEntries', newLogEntries);
   };
 
+  if (!isLoaded(auth)) {
+    return (
+      <Segment basic>
+        <Container>
+          <Message icon>
+            <Icon name="circle notched" loading />
+            <Message.Content>
+              <Message.Header>Checking Authentication Status</Message.Header>
+              Please wait while we check your authentication status.
+            </Message.Content>
+          </Message>
+        </Container>
+      </Segment>
+    );
+  }
+
   return (
-    <div>
+    <>
       <NavBar
         handleLogin={() => firebase.login({ provider: 'google', type: 'popup' })}
         showLogin={isEmpty(auth)}
@@ -126,20 +163,7 @@ function Home() {
       <Divider hidden />
       <Divider hidden />
       <Divider hidden />
-      <Segment basic>
-        <Message icon hidden={isLoaded(auth)}>
-          <Icon name="circle notched" loading />
-          <Message.Content>
-            <Message.Header>Loading App</Message.Header>
-            Please wait while the application loads.
-          </Message.Content>
-        </Message>
-        {isLoaded(auth) && (
-          <Brews
-            onHandleEdit={onShowEditForm}
-            onHandleAdd={onShowAddForm}
-            isAuthenticated={!isEmpty(auth)}
-          />)}
+      <Container>
         <AddBrew
           open={showAddModal}
           onClose={onHideAddForm}
@@ -156,9 +180,18 @@ function Home() {
           onSetEditState={onSetEditState}
           showEditError={showEditError}
           onAddLogEntry={onAddLogEntry}
+          onSetAddLogState={onSetAddLogState}
+          addLogEntryState={addLogEntryState}
         />
-      </Segment>
-    </div>
+        {isLoaded(auth) && (
+          <Brews
+            onHandleEdit={onShowEditForm}
+            onHandleAdd={onShowAddForm}
+            isAuthenticated={!isEmpty(auth)}
+          />
+        )}
+      </Container>
+    </>
   );
 }
 
