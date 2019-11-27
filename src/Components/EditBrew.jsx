@@ -113,7 +113,7 @@ export default function EditBrew(
                   </Table.Header>
                   <Table.Body>
                     {editState.ingredients.map((ingredient) => (
-                      <Table.RoW>
+                      <Table.RoW key={ingredient.timestamp}>
                         <Table.Cell content={ingredient.ingredientName} />
                         <Table.Cell content={ingredient.ingredientQty} />
                         <Table.Cell content={ingredient.unitType} />
@@ -177,10 +177,10 @@ export default function EditBrew(
                   </Table.Header>
                   <Table.Body>
                     {editState.logEntries.map((logEntry) => (
-                      <Table.Row>
-                        <Table.Cell content={logEntry.dateCreated} />
-                        <Table.Cell content={logEntry.logType} />
-                        <Table.Cell content={logEntry.logContent} />
+                      <Table.Row key={logEntry.timestamp}>
+                        <Table.Cell content={logEntry.logEntryDate} />
+                        <Table.Cell content={logEntry.logType && logOptions.find((o) => o.key === logEntry.logType).text} />
+                        <Table.Cell content={logEntry.content} />
                       </Table.Row>
                     ))}
                   </Table.Body>

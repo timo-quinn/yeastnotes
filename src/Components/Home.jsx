@@ -26,12 +26,14 @@ const defaultAddState = {
 };
 
 const defaultLogState = {
+  timestamp: '',
   logEntryDate: '',
   logType: '',
   content: '',
 };
 
 const defaultIngredientState = {
+  timestamp: '',
   ingredientName: '',
   ingredientQty: '',
   unitType: '',
@@ -131,7 +133,7 @@ function Home() {
         newLogEntries.push(log);
       });
     }
-    newLogEntries.push({ log: addLogEntryState });
+    newLogEntries.push({  ...addLogEntryState, timestamp: Date.now() });
     // change the state, but let the save button do the firestore write
     onSetEditState('logEntries', newLogEntries);
   };
@@ -143,7 +145,7 @@ function Home() {
         newIngredients.push(ingr);
       });
     }
-    newIngredients.push({ log: addIngredientState });
+    newIngredients.push({ ...addIngredientState, timestamp: Date.now() });
     // change the state, but let the save button do the firestore write
     onSetEditState('ingredients', newIngredients);
   };
