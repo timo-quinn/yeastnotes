@@ -4,9 +4,10 @@ import {
   Modal,
   Form,
   Grid,
+  Segment,
   Header,
   Table,
-  Divider,
+  Divider, Message,
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import { brewOptions, logOptions } from '../consts';
@@ -22,6 +23,11 @@ export default function EditBrew(
     onAddLogEntry,
     onSetAddLogState,
     addLogEntryState,
+    showLogEntryError,
+    onAddIngredientsEntry,
+    onSetAddIngredientState,
+    addIngredientState,
+    showIngredientError,
   },
 ) {
   return (
@@ -35,7 +41,7 @@ export default function EditBrew(
     >
       <Modal.Header content={`Edit ${editState.title}`} />
       <Modal.Content>
-        <Grid centered columns={2} divided>
+        <Grid divided>
           <Grid.Row>
             <Grid.Column>
               <Header as="h4" content="Brew Details" />
@@ -73,12 +79,20 @@ export default function EditBrew(
                   value={editState.overview}
                   onChange={(e) => onSetEditState('overview', e.target.value)}
                 />
-                <Form.Input
-                  label="Starting Gravity"
-                  placeholder="1.010"
-                  value={editState.startingGravity}
-                  onChange={(e) => onSetEditState('startingGravity', e.target.value)}
-                />
+                <Form.Group widths="equal">
+                  <Form.Input
+                    label="Starting Gravity"
+                    placeholder="1.010"
+                    value={editState.startingGravity}
+                    onChange={(e) => onSetEditState('startingGravity', e.target.value)}
+                  />
+                  <Form.Input
+                    label="Yeast"
+                    placeholder="Lalvin EC-1118"
+                    value={editState.yeast}
+                    onChange={(e) => onSetEditState('yeast', e.target.value)}
+                  />
+                </Form.Group>
                 <Form.Button
                   positive
                   icon="save"
@@ -86,75 +100,134 @@ export default function EditBrew(
                   content="Save"
                 />
               </Form>
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h4" content="Log" />
+              <Header as="h4" content="Ingredients" />
               <Divider />
-              {editState.logEntries && editState.logEntries.length > 0 && (
+              {editState.ingredients && editState.ingredients.length > 0 ? (
                 <Table compact basic="very">
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell>
-                        Date Created
-                      </Table.HeaderCell>
-                      <Table.HeaderCell>
-                        Log Type
-                      </Table.HeaderCell>
-                      <Table.HeaderCell>
-                        Content
-                      </Table.HeaderCell>
+                      <Table.HeaderCell content="Name" />
+                      <Table.HeaderCell content="Quantity" />
+                      <Table.HeaderCell content="Unit" />
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {editState.ingredients.map((ingredient) => (
+                      <Table.RoW>
+                        <Table.Cell content={ingredient.ingredientName} />
+                        <Table.Cell content={ingredient.ingredientQty} />
+                        <Table.Cell content={ingredient.unitType} />
+                      </Table.RoW>
+                    ))}
+                  </Table.Body>
+                </Table>
+              ) : (
+                <Message
+                  header="No Ingredients"
+                  content="Add ingredients with the below form."
+                />
+              )}
+
+              <Segment>
+                <Form
+                  onSubmit={onAddIngredientsEntry}
+                  size="small"
+                >
+
+                  <Form.Input
+                    label="Name"
+                    required
+                    placeholder="Orange Blossom Honey"
+                    value={addIngredientState.ingredientName}
+                    onChange={(e) => onSetAddIngredientState('ingredientName', e.target.value)}
+                  />
+                  <Form.Input
+                    label="Quantity"
+                    required
+                    placeholder="2"
+                    value={addIngredientState.ingredientQty}
+                    onChange={(e) => onSetAddIngredientState('ingredientQty', e.target.value)}
+                  />
+                  <Form.Input
+                    label="Unit"
+                    required
+                    placeholder="Kg"
+                    value={addIngredientState.unitType}
+                    onChange={(e) => onSetAddIngredientState('unitType', e.target.value)}
+                  />
+                  <Form.Button
+                    primary
+                    size="small"
+                    icon="plus"
+                    type="submit"
+                    content="Add Ingredient"
+                  />
+                </Form>
+              </Segment>
+              <Header as="h4" content="Log" />
+              <Divider />
+              {editState.logEntries && editState.logEntries.length > 0 ? (
+                <Table compact basic="very">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell content="Date Created" />
+                      <Table.HeaderCell content="Log Type" />
+                      <Table.HeaderCell content="Content" />
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
                     {editState.logEntries.map((logEntry) => (
                       <Table.Row>
-                        <Table.Cell>
-                          {logEntry.dateCreated}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {logEntry.logType}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {logEntry.logContent}
-                        </Table.Cell>
+                        <Table.Cell content={logEntry.dateCreated} />
+                        <Table.Cell content={logEntry.logType} />
+                        <Table.Cell content={logEntry.logContent} />
                       </Table.Row>
                     ))}
                   </Table.Body>
                 </Table>
+              ) : (
+                <Message
+                  header="No Log Entries"
+                  content="Add a log entry with the below form."
+                />
               )}
-              <Form
-                onSubmit={onSubmit}
-                size="small"
-              >
-                <Form.Group widths="equal">
-                  <Form.Select
-                    label="Type"
-                    options={logOptions}
-                    onChange={(e, option) => onSetAddLogState('logType', option.value)}
+              <Segment>
+                <Form
+                  onSubmit={onAddLogEntry}
+                  size="small"
+                >
+                  <Form.Group widths="equal">
+                    <Form.Select
+                      label="Type"
+                      options={logOptions}
+                      onChange={(e, option) => onSetAddLogState('logType', option.value)}
+                      required
+                    />
+                    <Form.Field
+                      control={DateInput}
+                      required
+                      label="Log Entry Date"
+                      iconPosition="left"
+                      value={addLogEntryState.logEntryDate}
+                      onChange={(e, date) => onSetAddLogState('logEntryDate', date.value)}
+                    />
+                  </Form.Group>
+                  <Form.Input
+                    label="Content"
                     required
+                    placeholder="1.005 Gravity Read"
+                    value={addLogEntryState.content}
+                    onChange={(e) => onSetAddLogState('content', e.target.value)}
                   />
-                  <Form.Field
-                    control={DateInput}
-                    label="Log Entry Date"
-                    iconPosition="left"
-                    value={addLogEntryState.logEntryDate}
-                    onChange={(e, date) => onSetAddLogState('logEntryDate', date.value)}
+                  <Form.Button
+                    primary
+                    size="small"
+                    icon="plus"
+                    type="submit"
+                    content="Add Log Entry"
                   />
-                </Form.Group>
-                <Form.Input
-                  label="Content"
-                  placeholder="1.005 Gravity Read"
-                  value={addLogEntryState.content}
-                  onChange={(e) => onSetAddLogState('content', e.target.value)}
-                />
-                <Form.Button
-                  positive
-                  basic
-                  icon="plus"
-                  onClick={onAddLogEntry}
-                  content="Add Log Entry"
-                />
-              </Form>
+                </Form>
+              </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>

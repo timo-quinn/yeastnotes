@@ -67,12 +67,20 @@ export default function AddBrew(
                   value={addState.overview}
                   onChange={(e) => onSetAddState('overview', e.target.value)}
                 />
-                <Form.Input
-                  label="Starting Gravity"
-                  placeholder="1.010"
-                  value={addState.startingGravity}
-                  onChange={(e) => onSetAddState('startingGravity', e.target.value)}
-                />
+                <Form.Group widths="equal">
+                  <Form.Input
+                    label="Starting Gravity"
+                    placeholder="1.010"
+                    value={addState.startingGravity}
+                    onChange={(e) => onSetAddState('startingGravity', e.target.value)}
+                  />
+                  <Form.Input
+                    label="Yeast"
+                    placeholder="Lalvin EC-1118"
+                    value={addState.yeast}
+                    onChange={(e) => onSetAddState('yeast', e.target.value)}
+                  />
+                </Form.Group>
                 <Form.Button
                   positive
                   icon="plus"

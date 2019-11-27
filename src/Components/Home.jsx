@@ -6,30 +6,22 @@ import {
 import {
   Message,
   Icon,
-  Grid,
   Container,
   Menu,
   Button,
 } from 'semantic-ui-react';
-import Brews from './Components/Brews';
-import AddBrew from './Components/AddBrew';
-import EditBrew from './Components/EditBrew';
+import Brews from './Brews';
+import AddBrew from './AddBrew';
+import EditBrew from './EditBrew';
 
 const defaultAddState = {
   title: '',
   overview: '',
   startingGravity: '',
   brewType: '',
+  yeast: '',
   startDate: '',
-  logEntries: [],
-};
-
-const defaultEditState = {
-  title: '',
-  overview: '',
-  startingGravity: '',
-  brewType: '',
-  startDate: '',
+  ingredients: [],
   logEntries: [],
 };
 
@@ -39,14 +31,23 @@ const defaultLogState = {
   content: '',
 };
 
+const defaultIngredientState = {
+  ingredientName: '',
+  ingredientQty: '',
+  unitType: '',
+};
+
 function Home() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showAddError, setShowAddError] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showEditError, setShowEditError] = useState(false);
   const [addLogEntryState, setAddLogEntryState] = useState(defaultLogState);
+  const [showLogEntryError, setShowLogEntryError] = useState(false);
+  const [addIngredientState, setAddIngredientState] = useState(defaultLogState);
+  const [showIngredientError, setShowIngredientError] = useState(defaultIngredientState);
   const [addState, setAddState] = useState(defaultAddState);
-  const [editState, setEditState] = useState(defaultEditState);
+  const [editState, setEditState] = useState(defaultAddState);
 
   const firebase = useFirebase();
   const firestore = useFirestore();
@@ -57,6 +58,7 @@ function Home() {
   const onSetAddState = (key, val) => updateState(key, val, setAddState, addState);
   const onSetEditState = (key, val) => updateState(key, val, setEditState, editState);
   const onSetAddLogState = (key, val) => updateState(key, val, setAddLogEntryState, addLogEntryState);
+  const onSetAddIngredientState = (key, val) => updateState(key, val, setAddIngredientState, addIngredientState);
 
   const onShowAddForm = () => {
     setAddState(defaultAddState);
@@ -68,18 +70,16 @@ function Home() {
     setShowAddError(false);
   };
 
-
   const onShowEditForm = (e, brew) => {
     setEditState(brew.data);
     setShowEditModal(true);
   };
 
   const onHideEditForm = () => {
-    setEditState(defaultEditState);
+    setEditState(defaultAddState);
     setShowEditModal(false);
     setShowEditError(false);
   };
-
 
   const onSubmitAdd = () => {
     setShowAddError(false);
@@ -126,13 +126,26 @@ function Home() {
 
   const onAddLogEntry = () => {
     const newLogEntries = [];
-    const currentLogEntries = editState.logEntries;
-    currentLogEntries.forEach((log) => {
-      newLogEntries.push(log);
-    });
+    if (editState.logEntries) {
+      editState.logEntries.forEach((log) => {
+        newLogEntries.push(log);
+      });
+    }
     newLogEntries.push({ log: addLogEntryState });
     // change the state, but let the save button do the firestore write
     onSetEditState('logEntries', newLogEntries);
+  };
+
+  const onAddIngredientsEntry = () => {
+    const newIngredients = [];
+    if (editState.ingredients) {
+      editState.ingredients.forEach((ingr) => {
+        newIngredients.push(ingr);
+      });
+    }
+    newIngredients.push({ log: addIngredientState });
+    // change the state, but let the save button do the firestore write
+    onSetEditState('ingredients', newIngredients);
   };
 
   if (!isLoaded(auth)) {
@@ -140,7 +153,6 @@ function Home() {
       <>
         <Menu
           fixed="top"
-          inverted
           borderless
         >
           <Container>
@@ -167,7 +179,6 @@ function Home() {
     <>
       <Menu
         fixed="top"
-        inverted
         borderless
       >
         <Container>
@@ -216,6 +227,11 @@ function Home() {
           onAddLogEntry={onAddLogEntry}
           onSetAddLogState={onSetAddLogState}
           addLogEntryState={addLogEntryState}
+          showLogEntryError={showLogEntryError}
+          onAddIngredientsEntry={onAddIngredientsEntry}
+          onSetAddIngredientState={onSetAddIngredientState}
+          addIngredientState={addIngredientState}
+          showIngredientError={showIngredientError}
         />
         {isLoaded(auth) && (
           <Brews
