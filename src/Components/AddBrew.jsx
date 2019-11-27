@@ -37,6 +37,7 @@ export default function AddBrew(
               <Header as="h4" content="Brew Details" />
               <Form
                 onSubmit={onSubmit}
+                size="small"
               >
                 <Form.Input
                   label="Title"

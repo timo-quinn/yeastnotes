@@ -42,6 +42,7 @@ export default function EditBrew(
               <Divider />
               <Form
                 onSubmit={onSubmit}
+                size="small"
               >
                 <Form.Input
                   label="Title"
@@ -123,6 +124,7 @@ export default function EditBrew(
               )}
               <Form
                 onSubmit={onSubmit}
+                size="small"
               >
                 <Form.Group widths="equal">
                   <Form.Select
