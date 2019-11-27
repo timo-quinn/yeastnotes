@@ -38,101 +38,84 @@ export default function Brews(
 
   if (!isLoaded(brews)) {
     return (
-      <Segment basic>
-        <Container>
-          <Message icon>
-            <Icon name="circle notched" loading />
-            <Message.Content>
-              <Message.Header>Loading Brews</Message.Header>
-              Please wait while we fetch your data.
-            </Message.Content>
-          </Message>
-        </Container>
-      </Segment>
+      <Message icon>
+        <Icon name="circle notched" loading />
+        <Message.Content>
+          <Message.Header>Loading Brews</Message.Header>
+            Please wait while we fetch your data.
+        </Message.Content>
+      </Message>
     );
   }
 
   if (isEmpty(brews) && !isEmpty(auth)) {
     return (
-      <Segment basic>
-        <Container>
-          <Message visible content="No brews added yet!" />
-        </Container>
-      </Segment>
+      <Message visible content="No brews added yet!" />
     );
   }
 
   return (
-    <Segment basic>
-      <Container>
-        <Message
-          hidden={isAuthenticated}
-          content="Yeast Notes is read-only until you log in."
-          attached="top"
-        />
-        <Message
-          hidden={!isAuthenticated}
-          content={`Logged in as ${auth.email}`}
-          attached="top"
-        />
-        <Table
-          compact
-          unstackable
-          attached="bottom"
-        >
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell />
-              <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell>Start Date</Table.HeaderCell>
-              <Table.HeaderCell>Type</Table.HeaderCell>
-              <Table.HeaderCell>Short Description</Table.HeaderCell>
+    <>
+      <Message
+        hidden={isAuthenticated}
+        content="Yeast Notes is read-only until you log in."
+        attached="top"
+      />
+      <Message
+        hidden={!isAuthenticated}
+        content={`Logged in as ${auth.email}`}
+        attached="top"
+      />
+      <Table
+        unstackable
+        selectable
+        attached="bottom"
+      >
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Title</Table.HeaderCell>
+            <Table.HeaderCell>Start Date</Table.HeaderCell>
+            <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Short Description</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {brews && brews.map((brew) => (
+            <Table.Row
+              key={brew.id}
+              onClick={isAuthenticated ? (e) => onHandleEdit(e, brew) : () => {}}
+            >
+              <Table.Cell
+                content={brew.data.title}
+              />
+              <Table.Cell
+                content={brew.data.startDate}
+              />
+              <Table.Cell
+                content={brew.data.brewType && brewOptions.find((o) => o.key === brew.data.brewType).text}
+              />
+              <Table.Cell
+                content={brew.data.overview}
+              />
             </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {brews && brews.map((brew) => (
-              <Table.Row key={brew.id}>
-                <Table.Cell collapsing>
-                  <Button
-                    primary
-                    onClick={(e) => onHandleEdit(e, brew)}
-                    icon="edit"
-                    size="small"
-                    disabled={!isAuthenticated}
-                  />
-                </Table.Cell>
-                <Table.Cell
-                  content={brew.data.title}
-                />
-                <Table.Cell
-                  content={brew.data.startDate}
-                />
-                <Table.Cell
-                  content={brew.data.brewType && brewOptions.find((o) => o.key === brew.data.brewType).text}
-                />
-                <Table.Cell
-                  content={brew.data.overview}
-                />
-              </Table.Row>
-            ))}
-          </Table.Body>
-          <Table.Footer fullWidth>
-            <Table.Row>
-              <Table.HeaderCell colSpan={5}>
-                <Button
-                  positive
-                  onClick={(e) => onHandleAdd(e)}
-                  icon="add"
-                  content="Add Brew"
-                  size="small"
-                  disabled={!isAuthenticated}
-                />
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-      </Container>
-    </Segment>
+          ))}
+        </Table.Body>
+        <Table.Footer fullWidth>
+          <Table.Row>
+            <Table.HeaderCell colSpan={5}>
+              <Button
+                positive
+                onClick={(e) => onHandleAdd(e)}
+                icon="add"
+                content="Add Brew"
+                size="small"
+                disabled={!isAuthenticated}
+              />
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
+    </>
   );
 }
 

@@ -6,11 +6,11 @@ import {
 import {
   Message,
   Icon,
+  Grid,
   Container,
-  Segment,
-  Divider,
+  Menu,
+  Button,
 } from 'semantic-ui-react';
-import NavBar from './Components/NavBar';
 import Brews from './Components/Brews';
 import AddBrew from './Components/AddBrew';
 import EditBrew from './Components/EditBrew';
@@ -70,7 +70,6 @@ function Home() {
 
 
   const onShowEditForm = (e, brew) => {
-    console.log(brew);
     setEditState(brew.data);
     setShowEditModal(true);
   };
@@ -138,8 +137,20 @@ function Home() {
 
   if (!isLoaded(auth)) {
     return (
-      <Segment basic>
-        <Container>
+      <>
+        <Menu
+          fixed="top"
+          inverted
+          borderless
+        >
+          <Container>
+            <Menu.Item>
+              <img alt="" src="/logo-simple.png" />
+            </Menu.Item>
+            <Menu.Item header>Yeast Notes</Menu.Item>
+          </Container>
+        </Menu>
+        <Container text style={{ marginTop: '4em' }}>
           <Message icon>
             <Icon name="circle notched" loading />
             <Message.Content>
@@ -148,22 +159,43 @@ function Home() {
             </Message.Content>
           </Message>
         </Container>
-      </Segment>
+      </>
     );
   }
 
   return (
     <>
-      <NavBar
-        handleLogin={() => firebase.login({ provider: 'google', type: 'popup' })}
-        showLogin={isEmpty(auth)}
-        handleLogoff={() => firebase.logout()}
-        emailAddress={!isEmpty(auth) ? auth.email : 'Unknown Email Address'}
-      />
-      <Divider hidden />
-      <Divider hidden />
-      <Divider hidden />
-      <Container>
+      <Menu
+        fixed="top"
+        inverted
+        borderless
+      >
+        <Container>
+          <Menu.Item>
+            <img alt="" src="/logo-simple.png" />
+          </Menu.Item>
+          <Menu.Item header>Yeast Notes</Menu.Item>
+          <Menu.Item>
+            {!isEmpty(auth) ? (
+              <Button
+                onClick={() => firebase.logout()}
+                icon="log out"
+                content="Log Out"
+              />
+            ) : (
+              <Button
+                primary
+                icon="google"
+                onClick={() => firebase.login({ provider: 'google', type: 'popup' })}
+                content="Log In With Google"
+              />
+            )}
+          </Menu.Item>
+        </Container>
+      </Menu>
+
+
+      <Container text style={{ marginTop: '4em' }}>
         <AddBrew
           open={showAddModal}
           onClose={onHideAddForm}
