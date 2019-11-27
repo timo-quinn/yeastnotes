@@ -175,22 +175,24 @@ function Home() {
             <img alt="" src="/logo-simple.png" />
           </Menu.Item>
           <Menu.Item header>Yeast Notes</Menu.Item>
-          <Menu.Item>
-            {!isEmpty(auth) ? (
-              <Button
-                onClick={() => firebase.logout()}
-                icon="log out"
-                content="Log Out"
-              />
-            ) : (
-              <Button
-                primary
-                icon="google"
-                onClick={() => firebase.login({ provider: 'google', type: 'popup' })}
-                content="Log In With Google"
-              />
-            )}
-          </Menu.Item>
+          <Menu.Menu position="right">
+            <Menu.Item>
+              {!isEmpty(auth) ? (
+                <Button
+                  onClick={() => firebase.logout()}
+                  icon="log out"
+                  content="Log Out"
+                />
+              ) : (
+                <Button
+                  primary
+                  icon="google"
+                  onClick={() => firebase.login({ provider: 'google', type: 'popup' })}
+                  content="Log In With Google"
+                />
+              )}
+            </Menu.Item>
+          </Menu.Menu>
         </Container>
       </Menu>
 

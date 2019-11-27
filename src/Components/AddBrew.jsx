@@ -27,6 +27,7 @@ export default function AddBrew(
       closeOnDimmerClick
       closeIcon
       closeOnEscape
+      centered={false}
     >
       <Modal.Header content="Add Brew" />
       <Modal.Content>

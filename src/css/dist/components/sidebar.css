@@ -88,7 +88,7 @@
 
 /* Whole Page */
 body.pushable {
-  background: #545454;
+  background: #333333;
 }
 body.pushable.dimmed {
   background: inherit;
@@ -141,7 +141,7 @@ body.pushable.dimmed {
   background: inherit;
 }
 body.pushable > .pusher {
-  background: #FFFFFF;
+  background: #F9F9F9;
 }
 
 /*--------------
@@ -207,13 +207,13 @@ body.pushable > .pusher {
 /* Shadow Direction */
 .ui.left.visible.sidebar,
 .ui.right.visible.sidebar {
-  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
+          box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
 }
 .ui.top.visible.sidebar,
 .ui.bottom.visible.sidebar {
-  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
+          box-shadow: 0 0 20px rgba(34, 36, 38, 0.15);
 }
 
 /* Visible On Load */

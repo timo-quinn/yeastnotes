@@ -31,6 +31,7 @@ export default function EditBrew(
       closeOnDimmerClick
       closeIcon
       closeOnEscape
+      centered={false}
     >
       <Modal.Header content={`Edit ${editState.title}`} />
       <Modal.Content>

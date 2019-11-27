@@ -67,7 +67,6 @@ export default function Brews(
         attached="top"
       />
       <Table
-        unstackable
         selectable
         attached="bottom"
       >
