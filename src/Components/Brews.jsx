@@ -46,12 +46,6 @@ export default function Brews(
     );
   }
 
-  if (isEmpty(brews) && !isEmpty(auth)) {
-    return (
-      <Message visible content="No brews added yet!" />
-    );
-  }
-
   return (
     <>
       <Message
