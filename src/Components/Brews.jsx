@@ -10,7 +10,6 @@ import {
   Message,
   Button,
   Icon,
-  Segment,
   Table,
   Container,
 } from 'semantic-ui-react';
