@@ -50,7 +50,7 @@ function Home() {
   const [showIngredientError, setShowIngredientError] = useState(false);
   const [addState, setAddState] = useState(defaultState);
   const [editState, setEditState] = useState(defaultState);
-  const [selectedId, setSelectedId] = useState('');
+  const [selectedId, setSelectedId] = useState(-1);
 
   const firebase = useFirebase();
   const firestore = useFirestore();
@@ -83,7 +83,7 @@ function Home() {
     setEditState(defaultState);
     setNewLogEntry(defaultLogState);
     setNewIngredient(defaultIngredientState);
-    setSelectedId('');
+    setSelectedId(-1);
     setShowEditModal(false);
     setShowEditError(false);
   };
@@ -124,6 +124,9 @@ function Home() {
         },
       ).then(() => {
         setShowEditModal(false);
+        setNewLogEntry(defaultLogState);
+        setNewIngredient(defaultIngredientState);
+        setSelectedId(-1);
       }).catch((error) => {
         console.error(error);
         setShowEditError(true);
