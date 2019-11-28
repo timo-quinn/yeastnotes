@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal,
   Form,
   Grid,
   Segment,
+  Accordion,
   Header,
+  Icon,
   Table,
-  Divider, Message,
+  Divider,
+  Message,
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import { brewOptions, logOptions } from '../consts';
@@ -30,6 +33,13 @@ export default function EditBrew(
     showIngredientError,
   },
 ) {
+  const [activeIndex, setActiveIndex] = useState('');
+
+  const handleAccordionClick = (e, titleProps) => {
+    e.preventDefault();
+    setActiveIndex(activeIndex === titleProps.index ? -1 : titleProps.index);
+  };
+
   return (
     <Modal
       open={open}
@@ -128,42 +138,54 @@ export default function EditBrew(
                 />
               )}
 
-              <Segment>
-                <Form
-                  onSubmit={onAddIngredientsEntry}
-                  size="small"
+              <Accordion fluid styled>
+                <Accordion.Title
+                  onClick={handleAccordionClick}
+                  index={0}
+                  active={activeIndex === 0}
                 >
-
-                  <Form.Input
-                    label="Name"
-                    required
-                    placeholder="Orange Blossom Honey"
-                    value={addIngredientState.ingredientName}
-                    onChange={(e) => onSetAddIngredientState('ingredientName', e.target.value)}
-                  />
-                  <Form.Input
-                    label="Quantity"
-                    required
-                    placeholder="2"
-                    value={addIngredientState.ingredientQty}
-                    onChange={(e) => onSetAddIngredientState('ingredientQty', e.target.value)}
-                  />
-                  <Form.Input
-                    label="Unit"
-                    required
-                    placeholder="Kg"
-                    value={addIngredientState.unitType}
-                    onChange={(e) => onSetAddIngredientState('unitType', e.target.value)}
-                  />
-                  <Form.Button
-                    primary
+                  <Icon name="dropdown" />
+                  Add Ingredient
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 0}>
+                  <Form
+                    onSubmit={onAddIngredientsEntry}
                     size="small"
-                    icon="plus"
-                    type="submit"
-                    content="Add Ingredient"
-                  />
-                </Form>
-              </Segment>
+                  >
+
+                    <Form.Input
+                      label="Name"
+                      required
+                      placeholder="Orange Blossom Honey"
+                      value={addIngredientState.ingredientName}
+                      onChange={(e) => onSetAddIngredientState('ingredientName', e.target.value)}
+                    />
+                    <Form.Group widths="equal">
+                      <Form.Input
+                        label="Quantity"
+                        required
+                        placeholder="2"
+                        value={addIngredientState.ingredientQty}
+                        onChange={(e) => onSetAddIngredientState('ingredientQty', e.target.value)}
+                      />
+                      <Form.Input
+                        label="Unit"
+                        required
+                        placeholder="Kg"
+                        value={addIngredientState.unitType}
+                        onChange={(e) => onSetAddIngredientState('unitType', e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Button
+                      primary
+                      size="small"
+                      icon="plus"
+                      type="submit"
+                      content="Add Ingredient"
+                    />
+                  </Form>
+                </Accordion.Content>
+              </Accordion>
               <Header as="h4" content="Log" />
               <Divider />
               {editState.logEntries && editState.logEntries.length > 0 ? (
@@ -191,43 +213,53 @@ export default function EditBrew(
                   content="Add a log entry with the below form."
                 />
               )}
-              <Segment>
-                <Form
-                  onSubmit={onAddLogEntry}
-                  size="small"
+              <Accordion fluid styled>
+                <Accordion.Title
+                  onClick={handleAccordionClick}
+                  index={1}
+                  active={activeIndex === 1}
                 >
-                  <Form.Group widths="equal">
-                    <Form.Select
-                      label="Type"
-                      options={logOptions}
-                      onChange={(e, option) => onSetAddLogState('logType', option.value)}
-                      required
-                    />
-                    <Form.Field
-                      control={DateInput}
-                      required
-                      label="Log Entry Date"
-                      iconPosition="left"
-                      value={addLogEntryState.logEntryDate}
-                      onChange={(e, date) => onSetAddLogState('logEntryDate', date.value)}
-                    />
-                  </Form.Group>
-                  <Form.Input
-                    label="Content"
-                    required
-                    placeholder="1.005 Gravity Read"
-                    value={addLogEntryState.content}
-                    onChange={(e) => onSetAddLogState('content', e.target.value)}
-                  />
-                  <Form.Button
-                    primary
+                  <Icon name="dropdown" />
+                  Add Log Entry
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 1}>
+                  <Form
+                    onSubmit={onAddLogEntry}
                     size="small"
-                    icon="plus"
-                    type="submit"
-                    content="Add Log Entry"
-                  />
-                </Form>
-              </Segment>
+                  >
+                    <Form.Group widths="equal">
+                      <Form.Select
+                        label="Type"
+                        options={logOptions}
+                        onChange={(e, option) => onSetAddLogState('logType', option.value)}
+                        required
+                      />
+                      <Form.Field
+                        control={DateInput}
+                        required
+                        label="Log Entry Date"
+                        iconPosition="left"
+                        value={addLogEntryState.logEntryDate}
+                        onChange={(e, date) => onSetAddLogState('logEntryDate', date.value)}
+                      />
+                    </Form.Group>
+                    <Form.Input
+                      label="Content"
+                      required
+                      placeholder="1.005 Gravity Read"
+                      value={addLogEntryState.content}
+                      onChange={(e) => onSetAddLogState('content', e.target.value)}
+                    />
+                    <Form.Button
+                      primary
+                      size="small"
+                      icon="plus"
+                      type="submit"
+                      content="Add Log Entry"
+                    />
+                  </Form>
+                </Accordion.Content>
+              </Accordion>
             </Grid.Column>
           </Grid.Row>
         </Grid>
