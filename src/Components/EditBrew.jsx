@@ -4,7 +4,6 @@ import {
   Modal,
   Form,
   Grid,
-  Segment,
   Accordion,
   Header,
   Icon,
@@ -64,7 +63,7 @@ export default function EditBrew(
                   label="Title"
                   placeholder="My First Brew"
                   required
-                  value={editState.title}
+                  value={editState.title || ''}
                   onChange={(e) => onSetEditState('title', e.target.value)}
                 />
                 <Form.Group widths="equal">
@@ -78,7 +77,7 @@ export default function EditBrew(
                   <Form.Field
                     control={DateInput}
                     label="Brew Start Date"
-                    value={editState.startDate}
+                    value={editState.startDate || ''}
                     iconPosition="left"
                     onChange={(e, date) => onSetEditState('editState', date.value)}
                   />
@@ -86,20 +85,20 @@ export default function EditBrew(
                 <Form.Input
                   label="Short Description"
                   placeholder="A Traditional Mead"
-                  value={editState.overview}
+                  value={editState.overview || ''}
                   onChange={(e) => onSetEditState('overview', e.target.value)}
                 />
                 <Form.Group widths="equal">
                   <Form.Input
                     label="Starting Gravity"
                     placeholder="1.010"
-                    value={editState.startingGravity}
+                    value={editState.startingGravity || ''}
                     onChange={(e) => onSetEditState('startingGravity', e.target.value)}
                   />
                   <Form.Input
                     label="Yeast"
                     placeholder="Lalvin EC-1118"
-                    value={editState.yeast}
+                    value={editState.yeast || ''}
                     onChange={(e) => onSetEditState('yeast', e.target.value)}
                   />
                 </Form.Group>
@@ -169,7 +168,6 @@ export default function EditBrew(
                       />
                       <Form.Input
                         label="Unit"
-                        required
                         placeholder="Kg"
                         value={addIngredientState.unitType}
                         onChange={(e) => onSetAddIngredientState('unitType', e.target.value)}
