@@ -20,7 +20,7 @@ const middleware = [
 
 const createStoreWithMiddleware = compose(
   applyMiddleware(...middleware),
-  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? () => window.__REDUX_DEVTOOLS_EXTENSION__ : (f) => f,
+  // typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? () => window.__REDUX_DEVTOOLS_EXTENSION__ : (f) => f,
 )(createStore);
 
 const store = createStoreWithMiddleware(combineReducers({

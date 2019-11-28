@@ -50,6 +50,7 @@ function Home() {
   const [showIngredientError, setShowIngredientError] = useState(false);
   const [addState, setAddState] = useState(defaultState);
   const [editState, setEditState] = useState(defaultState);
+  const [selectedId, setSelectedId] = useState(-1);
 
   const firebase = useFirebase();
   const firestore = useFirestore();
@@ -74,11 +75,15 @@ function Home() {
 
   const onShowEditForm = (e, brew) => {
     setEditState(brew.data);
+    setSelectedId(brew.id);
     setShowEditModal(true);
   };
 
   const onHideEditForm = () => {
     setEditState(defaultState);
+    setNewLogEntry(defaultLogState);
+    setNewIngredient(defaultIngredientState);
+    setSelectedId(-1);
     setShowEditModal(false);
     setShowEditError(false);
   };
@@ -107,18 +112,21 @@ function Home() {
 
   const onSubmitEdit = () => {
     setShowEditError(false);
-    if (!addState.brewType) {
+    if (!editState.brewType) {
       console.log('missing type');
       setShowEditError(true);
     } else {
       firestore.update(
-        'brews',
+        `brews/${selectedId}`,
         {
           data: editState,
           updatedAt: Date.now(),
         },
       ).then(() => {
         setShowEditModal(false);
+        setNewLogEntry(defaultLogState);
+        setNewIngredient(defaultIngredientState);
+        setSelectedId(-1);
       }).catch((error) => {
         console.error(error);
         setShowEditError(true);

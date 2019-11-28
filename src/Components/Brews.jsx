@@ -11,7 +11,6 @@ import {
   Button,
   Icon,
   Table,
-  Container,
 } from 'semantic-ui-react';
 import { brewOptions } from '../consts';
 
