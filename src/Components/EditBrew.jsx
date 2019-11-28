@@ -122,18 +122,17 @@ export default function EditBrew(
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {editState.ingredients.map((ingredient) => (
-                      <Table.RoW key={ingredient.timestamp}>
-                        <Table.Cell content={ingredient.ingredientName} />
-                        <Table.Cell content={ingredient.ingredientQty} />
-                        <Table.Cell content={ingredient.unitType} />
-                      </Table.RoW>
+                    {editState.ingredients.map((i) => (
+                      <Table.Row key={i.timestamp}>
+                        <Table.Cell content={i.ingredientName} />
+                        <Table.Cell content={i.ingredientQty} />
+                        <Table.Cell content={i.unitType} />
+                      </Table.Row>
                     ))}
                   </Table.Body>
                 </Table>
               ) : (
                 <Message
-                  header="No Ingredients"
                   content="Add ingredients with the below form."
                 />
               )}
@@ -186,6 +185,7 @@ export default function EditBrew(
                   </Form>
                 </Accordion.Content>
               </Accordion>
+
               <Header as="h4" content="Log" />
               <Divider />
               {editState.logEntries && editState.logEntries.length > 0 ? (
@@ -209,7 +209,6 @@ export default function EditBrew(
                 </Table>
               ) : (
                 <Message
-                  header="No Log Entries"
                   content="Add a log entry with the below form."
                 />
               )}
