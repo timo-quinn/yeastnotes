@@ -4,40 +4,84 @@
       "collectionGroup": "brews",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "creatorId", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "ASCENDING" }
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "isPublic",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "brews",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "creatorId", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+        {
+          "fieldPath": "creatorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "brews",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "creatorId", "mode": "ASCENDING" },
-        { "fieldPath": "startDate", "mode": "ASCENDING" }
+        {
+          "fieldPath": "creatorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "brews",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "creatorId", "mode": "ASCENDING" },
-        { "fieldPath": "startDate", "mode": "DESCENDING" }
+        {
+          "fieldPath": "creatorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "brews",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "createdAt", "mode": "DESCENDING" },
-        { "fieldPath": "isPublic", "mode": "ASCENDING" }
+        {
+          "fieldPath": "creatorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "brews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isPublic",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
       ]
     }
   ],
