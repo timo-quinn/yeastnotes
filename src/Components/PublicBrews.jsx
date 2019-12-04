@@ -49,10 +49,10 @@ export default function Brews(
       >
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Title</Table.HeaderCell>
-            <Table.HeaderCell>Start Date</Table.HeaderCell>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Short Description</Table.HeaderCell>
+            <Table.HeaderCell content="Title" />
+            <Table.HeaderCell content="Start Date" singleLine />
+            <Table.HeaderCell content="Type" />
+            <Table.HeaderCell content="Short Description" singleLine />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -65,9 +65,11 @@ export default function Brews(
                 content={brew.data.title || ''}
               />
               <Table.Cell
-                content={brew.data.startDate || ''}
+                singleLine
+                content={brew.data.startDate || '[Planned]'}
               />
               <Table.Cell
+                singleLine
                 content={brew.data.brewType ? brewOptions.find((o) => o.key === brew.data.brewType).text : ''}
               />
               <Table.Cell
@@ -82,6 +84,5 @@ export default function Brews(
 }
 
 Brews.propTypes = {
-  onHandleEdit: PropTypes.func,
-  isAuthenticated: PropTypes.bool,
+  onHandleEdit: PropTypes.func.isRequired,
 };

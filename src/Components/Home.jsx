@@ -14,6 +14,7 @@ import {
   Table,
   Accordion,
   Modal,
+  Popup,
   Header,
   Grid,
   Form,
@@ -65,31 +66,36 @@ function Home() {
   const [selectedId, setSelectedId] = useState(-1);
   const [activeIndex, setActiveIndex] = useState('');
   const [viewOnly, setViewOnly] = useState(true);
-
+  const [isLoading, setLoading] = useState(false);
   const firebase = useFirebase();
   const firestore = useFirestore();
   const auth = useSelector((state) => state.firebase.auth);
-   
-  const updateState = (key, val, setFunc, state) => setFunc({ ...state, [key]: val });
 
+  const updateState = (key, val, setFunc, state) => setFunc({ ...state, [key]: val });
   const onSetAddState = (key, val) => updateState(key, val, setAddState, addState);
   const onSetEditState = (key, val) => updateState(key, val, setEditState, editState);
   const onSetAddLogState = (key, val) => updateState(key, val, setNewLogEntry, newLogEntry);
-  const onSetAddIngredientState = (key, val) => updateState(key, val, setNewIngredient, newIngredient);
+  const onSetAddIngredientState = (key, val) => updateState(
+    key,
+    val,
+    setNewIngredient,
+    newIngredient,
+  );
 
   const calculateAbv = (reading) => {
     try {
       const sg = Number(editState.startingGravity);
       const fg = Number(reading);
-      if (!sg || !fg ) {
+      if (!sg || !fg) {
         return '';
       }
+      // eslint-disable-next-line no-mixed-operators
       const abv = (76.08 * (sg - fg) / (1.775 - sg)) * (fg / 0.794);
       return ` (ABV ${abv.toFixed(2)}%)`;
-    } catch {
+    } catch (error) {
       return '';
     }
-  }
+  };
 
   const handleAccordionClick = (e, titleProps) => {
     e.preventDefault();
@@ -130,13 +136,18 @@ function Home() {
     setSelectedBrew(undefined);
     setShowEditModal(false);
     setShowEditError(false);
+    setShowLogEntryError(false);
+    setShowIngredientError(false);
+    setLoading(false);
   };
 
   const onSubmitAdd = () => {
     setShowAddError(false);
+    setLoading(true);
     if (!addState.brewType) {
       console.log('missing type');
       setShowAddError(true);
+      setLoading(false);
     } else {
       firestore.add(
         'brews',
@@ -147,8 +158,10 @@ function Home() {
         },
       ).then(() => {
         setShowAddModal(false);
+        setLoading(false);
       }).catch((error) => {
         console.error(error);
+        setLoading(false);
         setShowAddError(true);
       });
     }
@@ -156,9 +169,11 @@ function Home() {
 
   const onSubmitEdit = () => {
     setShowEditError(false);
+    setLoading(true);
     if (!editState.brewType) {
       console.log('missing type');
       setShowEditError(true);
+      setLoading(false);
     } else {
       firestore.update(
         `brews/${selectedId}`,
@@ -168,11 +183,13 @@ function Home() {
         },
       ).then(() => {
         setShowEditModal(false);
+        setLoading(false);
         setNewLogEntry(defaultLogState);
         setNewIngredient(defaultIngredientState);
         setSelectedId(-1);
       }).catch((error) => {
         console.error(error);
+        setLoading(false);
         setShowEditError(true);
       });
     }
@@ -180,22 +197,41 @@ function Home() {
 
   const onMakePublic = (e) => {
     e.preventDefault();
+    setLoading(true);
     firestore.update(
       `brews/${selectedId}`,
       {
-        isPublic: true,
+        isPublic: !selectedBrew.isPublic,
         updatedAt: Date.now(),
       },
     ).then(() => {
+      setLoading(false);
       setShowEditModal(false);
       setNewLogEntry(defaultLogState);
       setNewIngredient(defaultIngredientState);
       setSelectedId(-1);
     }).catch((error) => {
       console.error(error);
+      setLoading(false);
       setShowEditError(true);
     });
-  }
+  };
+
+  const onDelete = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    firestore.delete(`brews/${selectedId}`).then(() => {
+      setLoading(false);
+      setShowEditModal(false);
+      setNewLogEntry(defaultLogState);
+      setNewIngredient(defaultIngredientState);
+      setSelectedId(-1);
+    }).catch((error) => {
+      console.error(error);
+      setLoading(false);
+      setShowEditError(true);
+    });
+  };
 
   const onAddLogEntry = () => {
     const updatedLogEntries = [];
@@ -285,9 +321,9 @@ function Home() {
         <Modal
           open={showAddModal}
           onClose={onHideAddForm}
-          closeOnDimmerClick
-          closeIcon
-          closeOnEscape
+          closeOnDimmerClick={!isLoading}
+          closeIcon={!isLoading}
+          closeOnEscape={!isLoading}
           centered={false}
         >
           <Modal.Header content="Add Brew" />
@@ -299,6 +335,7 @@ function Home() {
                   <Form
                     onSubmit={onSubmitAdd}
                     size="large"
+                    loading={isLoading}
                   >
                     <Form.Input
                       label="Title"
@@ -367,9 +404,9 @@ function Home() {
         <Modal
           open={showEditModal}
           onClose={onHideEditForm}
-          closeOnDimmerClick
-          closeIcon
-          closeOnEscape
+          closeOnDimmerClick={!isLoading}
+          closeIcon={!isLoading}
+          closeOnEscape={!isLoading}
           centered={false}
         >
           <Modal.Header content={viewOnly ? `View ${editState.title}` : `Edit ${editState.title}`} />
@@ -425,6 +462,7 @@ function Home() {
                     <Form
                       onSubmit={onSubmitEdit}
                       size="large"
+                      loading={isLoading}
                     >
                       <Form.Input
                         label="Title"
@@ -477,26 +515,73 @@ function Home() {
                         header="Something Went Wrong"
                         content="Please check the form contents and try again."
                       />
-                      <Form.Group>
-                        <Form.Button
+                      <Button.Group fluid>
+                        <Button
                           positive
                           size="large"
                           icon="save"
                           type="submit"
-                          content="Save"
+                          content="Save Changes"
                         />
-                        <Form.Button
-                          primary
-                          onClick={onMakePublic}
-                          size="large"
-                          icon="eye"
-                          content="Make Public"
+                        {selectedBrew && selectedBrew.isPublic ? (
+                          <Button
+                            secondary
+                            onClick={onMakePublic}
+                            size="large"
+                            icon="eye"
+                            content="Hide From Public"
+                          />
+                        ) : (
+                          <Popup
+                            trigger={(
+                              <Button
+                                primary
+                                size="large"
+                                icon="eye"
+                                type="button"
+                                content="Make Public"
+                              />
+                            )}
+                            content={(
+                              <Button
+                                primary
+                                onClick={onMakePublic}
+                                size="large"
+                                icon="eye"
+                                content="Confirm Make Public"
+                              />
+                            )}
+                            on="click"
+                            position="top center"
+                          />
+                        )}
+                        <Popup
+                          trigger={(
+                            <Button
+                              negative
+                              size="large"
+                              icon="trash"
+                              type="button"
+                              content="Delete Brew"
+                            />
+                          )}
+                          content={(
+                            <Button
+                              negative
+                              size="large"
+                              icon="trash"
+                              onClick={onDelete}
+                              content="Confirm Delete"
+                            />
+                          )}
+                          on="click"
+                          position="top center"
                         />
-                      </Form.Group>
+                      </Button.Group>
 
                     </Form>
                   )}
-                  
+
                   <Header as="h4" content="Ingredients" />
                   <Divider />
                   {editState.ingredients && editState.ingredients.length > 0 ? (
@@ -538,6 +623,7 @@ function Home() {
                         <Form
                           onSubmit={onAddIngredientsEntry}
                           size="large"
+                          loading={isLoading}
                         >
                           <Form.Input
                             label="Name"
@@ -621,6 +707,7 @@ function Home() {
                         <Form
                           onSubmit={onAddLogEntry}
                           size="large"
+                          loading={isLoading}
                         >
                           <Form.Group widths="equal">
                             <Form.Select
@@ -670,7 +757,7 @@ function Home() {
           </Modal.Content>
         </Modal>
 
-        
+
         {isLoaded(auth) && isEmpty(auth) && (
           <Message
             content="Yeast Notes is read-only until you log in."
@@ -686,7 +773,9 @@ function Home() {
         )}
 
         {isLoaded(auth) && (
-          <PublicBrews onHandleEdit={onShowEditForm} />
+          <PublicBrews
+            onHandleEdit={onShowEditForm}
+          />
         )}
 
         <Divider hidden />
