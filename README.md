@@ -14,7 +14,7 @@ I'm planning to add the following features:
 
  * Deleting brews.
  * Copying brews.
- * Exporting data into Excel & JSON.
+ * Exporting data into CSV.
  * Tasting Notes (Clarity, Aroma, Taste).
  * Temperature Log (& adjusting Gravity accordingly?).
  * Nutrient Additions.

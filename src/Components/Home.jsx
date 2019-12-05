@@ -14,12 +14,15 @@ import {
   Table,
   Accordion,
   Modal,
+  Label,
   Popup,
   Header,
   Grid,
   Form,
+  Input,
   Menu,
   Button,
+  Segment,
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import MyBrews from './MyBrews';
@@ -523,6 +526,17 @@ function Home() {
                           type="submit"
                           content="Save Changes"
                         />
+                        {selectedBrew && (
+                          <Button
+                            as="a"
+                            primary
+                            size="large"
+                            href={`data: ${JSON.stringify({ ...selectedBrew.data }, null, 2)}`}
+                            download={`${selectedBrew.id}.json`}
+                            icon="download"
+                            content="Export"
+                          />
+                        )}
                         {selectedBrew && selectedBrew.isPublic ? (
                           <Button
                             secondary
@@ -562,7 +576,7 @@ function Home() {
                               size="large"
                               icon="trash"
                               type="button"
-                              content="Delete Brew"
+                              content="Delete"
                             />
                           )}
                           content={(
@@ -625,6 +639,9 @@ function Home() {
                           size="large"
                           loading={isLoading}
                         >
+                          <Label pointing="below">
+                            Ingredients added will only be saved when you click the Save Changes button above.
+                          </Label>
                           <Form.Input
                             label="Name"
                             required
@@ -709,6 +726,9 @@ function Home() {
                           size="large"
                           loading={isLoading}
                         >
+                          <Label pointing="below">
+                            Log Entries added will only be saved when you click the Save Changes button above.
+                          </Label>
                           <Form.Group widths="equal">
                             <Form.Select
                               label="Type"
