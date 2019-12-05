@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -19,12 +20,11 @@ import {
   Header,
   Grid,
   Form,
-  Input,
   Menu,
   Button,
-  Segment,
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
+import yeastList from '../yeast.json';
 import MyBrews from './MyBrews';
 import PublicBrews from './PublicBrews';
 import { brewOptions, logOptions } from '../consts';
@@ -531,7 +531,7 @@ function Home() {
                             as="a"
                             primary
                             size="large"
-                            href={`data: ${JSON.stringify({ ...selectedBrew.data }, null, 2)}`}
+                            href={`data: '${JSON.stringify({ ...selectedBrew.data }, null, 2)}'`}
                             download={`${selectedBrew.id}.json`}
                             icon="download"
                             content="Export"
@@ -698,9 +698,19 @@ function Home() {
                       <Table.Body>
                         {editState.logEntries.map((logEntry) => (
                           <Table.Row key={logEntry.timestamp}>
-                            <Table.Cell textAlign="right" singleLine content={logEntry.logEntryDate} />
-                            <Table.Cell textAlign="center" singleLine content={logEntry.logType && logOptions.find((o) => o.key === logEntry.logType).text} />
-                            <Table.Cell content={`${logEntry.content}${calculateAbv(logEntry.content)}`} />
+                            <Table.Cell
+                              textAlign="right"
+                              singleLine
+                              content={logEntry.logEntryDate}
+                            />
+                            <Table.Cell
+                              textAlign="center"
+                              singleLine
+                              content={logEntry.logType && logOptions.find((o) => o.key === logEntry.logType).text}
+                            />
+                            <Table.Cell
+                              content={`${logEntry.content}${calculateAbv(logEntry.content)}`}
+                            />
                           </Table.Row>
                         ))}
                       </Table.Body>
@@ -778,14 +788,12 @@ function Home() {
         </Modal>
 
 
-        {isLoaded(auth) && isEmpty(auth) && (
+        {isLoaded(auth) && isEmpty(auth) ? (
           <Message
             content="Yeast Notes is read-only until you log in."
             attached="top"
           />
-        )}
-
-        {isLoaded(auth) && !isEmpty(auth) && (
+        ) : (
           <MyBrews
             onHandleEdit={onShowEditForm}
             onHandleAdd={onShowAddForm}
