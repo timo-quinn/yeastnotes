@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^7.5.0",
+    "firebase": "^10.9.0",
     "fomantic-ui": "^2.8.2",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
